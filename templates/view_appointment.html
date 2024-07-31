@@ -1,0 +1,32 @@
+<!-- templates/accounts/view_appointment.html -->
+{% extends 'base.html' %}
+
+{% block title %}
+View Appointment
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Appointment Details</h2>
+    <table class="table table-bordered">
+        <tr>
+            <th>Doctor:</th>
+            <td>{{ appointment.doctor_name }}</td>
+        </tr>
+        <tr>
+            <th>Date:</th>
+            <td>{{ appointment.date }}</td>
+        </tr>
+        <tr>
+            <th>Time:</th>
+            <td>{{ appointment.time }}</td>
+        </tr>
+        <tr>
+            <th>Status:</th>
+            <td>{{ appointment.status }}</td>
+        </tr>
+    </table>
+    <a href="{% url 'edit_appointment' appointment.id %}" class="btn btn-warning">Edit</a>
+    <a href="{% url 'cancel_appointment' appointment.id %}" class="btn btn-danger">Cancel</a>
+</div>
+{% endblock %}

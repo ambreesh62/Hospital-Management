@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Home - Hospital App
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    <h1 class="display-5">Welcome to the Hospital Management by Ambreesh Kumar</h1>
+    <p class="lead">Your health is our priority. Manage your medical records, book appointments, and consult with doctors online.</p>
+    <hr class="my-4">
+    <p>"Welcome to Hospital Management – Your Trusted Partner in Healthcare."</p>
+</div>
+
+<div class="row text-center">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">For Patients</h5>
+                <p class="card-text">Access your medical records, book appointments, and consult with doctors from the comfort of your home.</p>
+                <a href="{% url 'patient_dashboard' %}" class="btn btn-dark">Patient Dashboard</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">For Doctors</h5>
+                <p class="card-text">Manage patient records, schedule appointments, and provide online consultations.</p>
+                <a href="{% url 'doctor_dashboard' %}" class="btn btn-dark">Doctor Dashboard</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">About Us</h5>
+                <p class="card-text">Learn more about our hospital and the services we offer.</p>
+                <a href="{% url 'about' %}" class="btn btn-dark">Learn More</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

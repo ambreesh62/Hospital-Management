@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Profile</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .profile-header {
+            background: linear-gradient(to right, #0062cc, #33adff);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .profile-picture {
+            border-radius: 50%;
+            border: 5px solid white;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{% url 'home' %}">Hospital Management</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'doctor_dashboard' %}">Doctor Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="profile-header text-center">
+            <h1>{{ doctor.user.username }}</h1>
+            {% if doctor.profile_picture %}
+                <img src="{{ doctor.profile_picture.url }}" alt="Profile Picture" class="profile-picture mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+            {% else %}
+                <img src="{% static 'images/default-profile.png' %}" alt="Default Profile Picture" class="profile-picture mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+            {% endif %}
+            <h3>{{ doctor.specialty }}</h3>
+            <!-- Update Profile Button -->
+            <a href="{% url 'update_doctor_profile' %}" class="btn btn-warning btn-sm">Update Profile</a>
+        </div>
+        <div class="card mt-4">
+            <div class="card-body">
+                <h4 class="card-title">Bio</h4>
+                <p class="card-text">{{ doctor.bio }}</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer text-center">
+        <p>&copy; Hospital Developed by Ambreesh Kumar</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

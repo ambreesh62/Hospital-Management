@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Doctor Profile
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header text-center">
+            <h2>Dr. {{ doctor.user.first_name }} {{ doctor.user.last_name }}</h2>
+        </div>
+        <div class="card-body text-center">
+            <div class="profile-picture-container mb-3">
+                {% if doctor.profile_picture %}
+                    <img src="{{ doctor.profile_picture.url }}" alt="Profile Picture" class="profile-picture" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+                {% else %}
+                    <img src="{% static 'images/default-profile.png' %}" alt="Default Profile Picture" class="profile-picture" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+                {% endif %}
+            </div>
+            <h4 class="text-muted">{{ doctor.specialty }}</h4>
+            <p class="mt-3">{{ doctor.bio }}</p>
+            <a href="{% url 'update_doctor_profile' %}" class="btn btn-dark mt-3">Update Profile</a>
+        </div>
+        <div class="card-footer text-muted text-center">
+            <p>Email: {{ doctor.user.email }}</p>
+            <p>Joined: {{ doctor.user.date_joined|date:"F j, Y" }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<style>
+    .profile-picture-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .profile-picture {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+</style>

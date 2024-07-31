@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Doctor Dashboard
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Doctor Dashboard</h1>
+    <a href="{% url 'add_doctor' %}" class="btn btn-primary">Add Doctor</a>
+    <p>Welcome, Dr. {{ user.first_name }} {{ user.last_name }}!</p>
+
+    <!-- Appointments Section -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4>Appointments</h4>
+        </div>
+        <div class="card-body">
+            {% if appointments %}
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                    <tr>
+                        <td>{{ appointment.patient.get_full_name }}</td>
+                        <td>{{ appointment.date }}</td>
+                        <td>{{ appointment.time }}</td>
+                        <td>{{ appointment.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No appointments found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Doctors List Section -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4>Doctors</h4>
+        </div>
+        <div class="card-body">
+            {% if doctors %}
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Specialty</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doctor in doctors %}
+                    <tr>
+                        <td>{{ doctor.user.get_full_name }}</td>
+                        <td>{{ doctor.specialty }}</td>
+                        <td>
+                            <a href="{% url 'view_doctor' doctor.id %}" class="btn btn-info btn-sm">View</a>
+                            <a href="{% url 'edit_doctor' doctor.id %}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{% url 'delete_doctor' doctor.id %}" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No doctors found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

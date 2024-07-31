@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Edit Doctor Profile
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Edit Doctor Profile</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label for="{{ form.profile_picture.id_for_label }}">Profile Picture:</label>
+                            {% if form.instance.profile_picture %}
+                                <img src="{{ form.instance.profile_picture.url }}" alt="Current Profile Picture" class="img-fluid mb-3" style="max-width: 200px;">
+                            {% endif %}
+                            <input type="file" name="profile_picture" id="{{ form.profile_picture.id_for_label }}" class="form-control-file">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.specialty.id_for_label }}">Specialty:</label>
+                            <input type="text" name="specialty" id="{{ form.specialty.id_for_label }}" value="{{ form.specialty.value }}" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.bio.id_for_label }}">Bio:</label>
+                            <textarea name="bio" id="{{ form.bio.id_for_label }}" class="form-control">{{ form.bio.value }}</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.available_times.id_for_label }}">Available Times:</label>
+                            <input type="text" name="available_times" id="{{ form.available_times.id_for_label }}" value="{{ form.available_times.value }}" class="form-control">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

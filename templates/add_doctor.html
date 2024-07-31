@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Add Doctor - Hospital App
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Add Doctor</h2>
+    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="id_user">User</label>
+                {{ form.user }}
+                <div class="invalid-feedback">
+                    Please select a user.
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="id_specialty">Specialty</label>
+                {{ form.specialty }}
+                <div class="invalid-feedback">
+                    Please enter the specialty.
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="id_available_times">Available Times</label>
+                {{ form.available_times }}
+                <div class="invalid-feedback">
+                    Please enter the available times.
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="id_profile_picture">Profile Picture</label>
+                {{ form.profile_picture }}
+                <div class="invalid-feedback">
+                    Please upload a profile picture.
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="id_bio">Bio</label>
+            {{ form.bio }}
+            <div class="invalid-feedback">
+                Please write a short bio.
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Add Doctor</button>
+    </form>
+</div>
+{% endblock %}
+
+<script>
+    // JavaScript for form validation
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            var forms = document.getElementsByClassName('needs-validation');
+            Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>

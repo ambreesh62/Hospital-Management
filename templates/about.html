@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+About Us - Hospital App
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row text-center">
+        <div class="col-md-12">
+            <h1 class="display-4">About Us</h1>
+            <p class="lead">Discover more about our team and services.</p>
+        </div>
+    </div>
+
+    <!-- Profile Section -->
+    <div class="row mt-4">
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <div class="card border-0 shadow-lg p-4 mb-4" style="border-radius: 10px;">
+                <!-- Use the static template tag to include the image -->
+                <img src="{% static 'images/ambreesh.jpg' %}" alt="Ambreesh Kumar" class="card-img-top rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                <div class="card-body text-center">
+                    <h3 class="card-title">Ambreesh Kumar</h3>
+                    <p class="card-text">Ambitious Backend Developer with expertise in Python, Django, and PostgreSQL. Passionate about Data Structures and Algorithms.</p>
+                    <a href="mailto:ambreesh@gmail.com" class="btn btn-dark">Contact Me</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information Section -->
+        <div class="col-md-6">
+            <h2 class="display-5 mb-4">Contact Information</h2>
+            <div class="list-group">
+                <a href="tel:6232610343" class="list-group-item list-group-item-action">
+                    <i class="fa fa-phone mr-2"></i> 623-261-0343
+                </a>
+                <a href="mailto:ambreesh@gmail.com" class="list-group-item list-group-item-action">
+                    <i class="fa fa-envelope mr-2"></i> ambreesh@gmail.com
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills and Interests Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h2 class="display-5 mb-4">Skills and Interests</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Technical Skills</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item">Backend: Python, Django, Django REST</li>
+                        <li class="list-group-item">Database: Postgres, SQL, Redis (cache)</li>
+                        <li class="list-group-item">VCS: GIT, Github, GitLab</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h4>Interests</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item">Data Structures</li>
+                        <li class="list-group-item">Algorithms</li>
+                        <li class="list-group-item">DBMS</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Links Section -->
+    <div class="row mt-4 text-center">
+        <div class="col-md-12">
+            <h2 class="display-5 mb-4">Connect with Me</h2>
+            <a href="https://github.com/ambreesh62" class="btn btn-dark btn-lg mx-2" target="_blank">
+                <i class="fa fa-github"></i> GitHub
+            </a>
+            <a href="https://www.linkedin.com/in/ambreesh62" class="btn btn-dark btn-lg mx-2" target="_blank">
+                <i class="fa fa-linkedin"></i> LinkedIn
+            </a>
+        </div>
+    </div>
+    
+    <!-- Back to Home Button -->
+    <div class="row mt-4 text-center">
+        <div class="col-md-12">
+            <a href="{% url 'home' %}" class="btn btn-danger btn-lg">
+                <i class="fa fa-home"></i> Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
