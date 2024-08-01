@@ -322,6 +322,9 @@ def patient_dashboard_view(request):
     }
     return render(request, "patient_dashboard.html", context)
 
+def doctor_profile_view(request, doctor_id):
+    doctor = get_object_or_404(Doctor, id=doctor_id)
+    return render(request, 'doctor_profile.html', {'doctor': doctor})
 
 @login_required
 def doctor_dashboard_view(request):
