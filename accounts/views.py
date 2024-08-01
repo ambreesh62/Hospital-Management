@@ -294,16 +294,20 @@ def error_page(request):
 
 @login_required
 def profile_view(request, doctor_id=None):
-    if request.user.user_type == 'doctor':
-        if doctor_id is not None:
+    if doctor_id is not None:
+        try:
             profile = get_object_or_404(Doctor, id=doctor_id)
-        else:
-            profile = get_object_or_404(Doctor, user=request.user)
-    elif request.user.user_type == 'patient':
-        profile = get_object_or_404(Patient, user=request.user)
+        except Doctor.DoesNotExist:
+            messages.error(request, "Doctor profile does not exist.")
+            return redirect("home")
     else:
-        messages.error(request, "User type is not recognized.")
-        return redirect("home")
+        if request.user.user_type == 'doctor':
+            profile = get_object_or_404(Doctor, user=request.user)
+        elif request.user.user_type == 'patient':
+            profile = get_object_or_404(Patient, user=request.user)
+        else:
+            messages.error(request, "User type is not recognized.")
+            return redirect("home")
 
     context = {
         "profile": profile,
