@@ -1,4 +1,3 @@
-<!-- templates/signup.html -->
 {% extends 'base.html' %}
 
 {% block title %}
@@ -7,64 +6,109 @@ Sign Up
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="text-center">Sign Up</h1>
-    <div class="row justify-content-center mt-5">
-        <div class="card p-4 mt-4 col-md-8">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
-            {{ form.username.errors }}
-            <div class="form-group">
-                {{ form.username.label_tag }}
-                {{ form.username }}
+    <h1 class="text-center mb-4">Create Your Account</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-primary shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="mb-0">Sign Up</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {% if form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    {{ form.non_field_errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            {{ form.username.label_tag(class="form-label font-weight-bold text-primary") }}
+                            {{ form.username(class="form-control rounded-pill") }}
+                            {% if form.username.errors %}
+                                <small class="text-danger">{{ form.username.errors }}</small>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            {{ form.email.label_tag(class="form-label font-weight-bold text-primary") }}
+                            {{ form.email(class="form-control rounded-pill") }}
+                            {% if form.email.errors %}
+                                <small class="text-danger">{{ form.email.errors }}</small>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            {{ form.profile_picture.label_tag(class="form-label font-weight-bold text-primary") }}
+                            {{ form.profile_picture(class="form-control-file") }}
+                            {% if form.profile_picture.errors %}
+                                <small class="text-danger">{{ form.profile_picture.errors }}</small>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            {{ form.address_line1.label_tag(class="form-label font-weight-bold text-primary") }}
+                            {{ form.address_line1(class="form-control rounded-pill") }}
+                            {% if form.address_line1.errors %}
+                                <small class="text-danger">{{ form.address_line1.errors }}</small>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            {{ form.city.label_tag(class="form-label font-weight-bold text-primary") }}
+                            {{ form.city(class="form-control rounded-pill") }}
+                            {% if form.city.errors %}
+                                <small class="text-danger">{{ form.city.errors }}</small>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            {{ form.state.label_tag(class="form-label font-weight-bold text-primary") }}
+                            {{ form.state(class="form-control rounded-pill") }}
+                            {% if form.state.errors %}
+                                <small class="text-danger">{{ form.state.errors }}</small>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            {{ form.pincode.label_tag(class="form-label font-weight-bold text-primary") }}
+                            {{ form.pincode(class="form-control rounded-pill") }}
+                            {% if form.pincode.errors %}
+                                <small class="text-danger">{{ form.pincode.errors }}</small>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            {{ form.password1.label_tag(class="form-label font-weight-bold text-primary") }}
+                            {{ form.password1(class="form-control rounded-pill") }}
+                            {% if form.password1.errors %}
+                                <small class="text-danger">{{ form.password1.errors }}</small>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            {{ form.password2.label_tag(class="form-label font-weight-bold text-primary") }}
+                            {{ form.password2(class="form-control rounded-pill") }}
+                            {% if form.password2.errors %}
+                                <small class="text-danger">{{ form.password2.errors }}</small>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            {{ form.user_type.label_tag(class="form-label font-weight-bold text-primary") }}
+                            {{ form.user_type(class="form-control rounded-pill") }}
+                            {% if form.user_type.errors %}
+                                <small class="text-danger">{{ form.user_type.errors }}</small>
+                            {% endif %}
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block rounded-pill">Sign Up</button>
+                    </form>
+                </div>
             </div>
-            {{ form.email.errors }}
-            <div class="form-group">
-                {{ form.email.label_tag }}
-                {{ form.email }}
-            </div>
-            {{ form.profile_picture.errors }}
-            <div class="form-group">
-                {{ form.profile_picture.label_tag }}
-                {{ form.profile_picture }}
-            </div>
-            {{ form.address_line1.errors }}
-            <div class="form-group">
-                {{ form.address_line1.label_tag }}
-                {{ form.address_line1 }}
-            </div>
-            {{ form.city.errors }}
-            <div class="form-group">
-                {{ form.city.label_tag }}
-                {{ form.city }}
-            </div>
-            {{ form.state.errors }}
-            <div class="form-group">
-                {{ form.state.label_tag }}
-                {{ form.state }}
-            </div>
-            {{ form.pincode.errors }}
-            <div class="form-group">
-                {{ form.pincode.label_tag }}
-                {{ form.pincode }}
-            </div>
-            {{ form.password1.errors }}
-            <div class="form-group">
-                {{ form.password1.label_tag }}
-                {{ form.password1 }}
-            </div>
-            {{ form.password2.errors }}
-            <div class="form-group">
-                {{ form.password2.label_tag }}
-                {{ form.password2 }}
-            </div>
-            {{ form.user_type.errors }}
-            <div class="form-group">
-                {{ form.user_type.label_tag }}
-                {{ form.user_type }}
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
-        </form>
+        </div>
     </div>
 </div>
 {% endblock %}
