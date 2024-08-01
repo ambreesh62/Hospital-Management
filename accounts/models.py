@@ -12,7 +12,7 @@ class CustomUser(AbstractUser):
     )
 
     user_type = models.CharField(
-        max_length=10, choices=USER_TYPE_CHOICES, default="patient"
+        max_length=10, choices=USER_TYPE_CHOICES, default="doctor"
     )
     profile_picture = models.ImageField(
         upload_to="profile_pictures/", blank=True, null=True
