@@ -57,6 +57,11 @@ Sign Up
                 {{ form.password2.label_tag }}
                 {{ form.password2 }}
             </div>
+            {{ form.user_type.errors }}
+            <div class="form-group">
+                {{ form.user_type.label_tag }}
+                {{ form.user_type }}
+            </div>
             <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
         </form>
     </div>
