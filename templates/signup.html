@@ -1,3 +1,4 @@
+<!-- templates/signup.html -->
 {% extends 'base.html' %}
 
 {% block title %}
@@ -11,67 +12,53 @@ Sign Up
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.non_field_errors }}
-            
             {{ form.username.errors }}
             <div class="form-group">
                 {{ form.username.label_tag }}
                 {{ form.username }}
             </div>
-
             {{ form.email.errors }}
             <div class="form-group">
                 {{ form.email.label_tag }}
                 {{ form.email }}
             </div>
-
             {{ form.profile_picture.errors }}
             <div class="form-group">
                 {{ form.profile_picture.label_tag }}
                 {{ form.profile_picture }}
             </div>
-
             {{ form.address_line1.errors }}
             <div class="form-group">
                 {{ form.address_line1.label_tag }}
                 {{ form.address_line1 }}
             </div>
-
             {{ form.city.errors }}
             <div class="form-group">
                 {{ form.city.label_tag }}
                 {{ form.city }}
             </div>
-
             {{ form.state.errors }}
             <div class="form-group">
                 {{ form.state.label_tag }}
                 {{ form.state }}
             </div>
-
             {{ form.pincode.errors }}
             <div class="form-group">
                 {{ form.pincode.label_tag }}
                 {{ form.pincode }}
             </div>
-
             {{ form.password1.errors }}
             <div class="form-group">
                 {{ form.password1.label_tag }}
                 {{ form.password1 }}
             </div>
-
             {{ form.password2.errors }}
             <div class="form-group">
                 {{ form.password2.label_tag }}
                 {{ form.password2 }}
             </div>
-
-            {{ form.user_type.errors }}
-            <div class="form-group">
-                {{ form.user_type.label_tag }}
-                {{ form.user_type }}
-            </div>
-
             <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
         </form>
     </div>
+</div>
+{% endblock %}
