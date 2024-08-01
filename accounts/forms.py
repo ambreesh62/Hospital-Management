@@ -95,3 +95,10 @@ class EditDoctorProfileForm(forms.ModelForm):
     class Meta:
         model = Doctor
         fields = ["profile_picture", "specialty", "bio", "available_times"]
+
+
+
+class DoctorProfileForm(forms.ModelForm):
+    class Meta:
+        model = Doctor
+        fields = ['specialty', 'available_times', 'profile_picture', 'bio']

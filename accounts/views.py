@@ -15,6 +15,7 @@ from .forms import (
     PatientForm,
     AppointmentForm,
     EditDoctorProfileForm,
+    DoctorProfileForm
 )
 from .models import Doctor, Appointment
 import json
@@ -392,20 +393,18 @@ def delete_doctor_view(request, doctor_id):
 
 @login_required
 def update_doctor_profile_view(request):
-    doctor = get_object_or_404(Doctor, user=request.user)
-    if request.method == "POST":
-        form = EditDoctorProfileForm(request.POST, request.FILES, instance=doctor)
+    if request.method == 'POST':
+        form = DoctorProfileForm(request.POST, request.FILES, instance=request.user.doctor)
         if form.is_valid():
             form.save()
-            messages.success(request, "Profile updated successfully.")
-            return redirect("doctor_profile")  # Redirect to the profile view
+            messages.success(request, 'Profile updated successfully!')
+            # Redirect to the doctor profile page
+            return redirect('doctor_profile', doctor_id=request.user.doctor.id)
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
-        form = EditDoctorProfileForm(instance=doctor)
-
-    context = {
-        "form": form,
-    }
-    return render(request, "update_doctor_profile.html", context)
+        form = DoctorProfileForm(instance=request.user.doctor)
+    return render(request, 'update_doctor_profile.html', {'form': form})
 
 
 def view_doctor_view(request, doctor_id):
