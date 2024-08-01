@@ -292,52 +292,27 @@ def patient_dashboard_view(request):
     return render(request, "patient_dashboard.html", context)
 
 
-# @login_required
-# def doctor_dashboard_view(request):
-#     try:
-#         doctor = get_object_or_404(Doctor, user=request.user)
-#     except Doctor.DoesNotExist:
-#         messages.error(request, "You are not authorized to view this page.")
-#         return redirect("home")  # Or any other page
-
-#     # Retrieve appointments related to the doctor
-#     appointments = Appointment.objects.filter(doctor=doctor)
-
-#     # Fetch all doctors for the doctor list
-#     doctors = Doctor.objects.all()
-
-#     context = {
-#         "user": request.user,
-#         "doctor": doctor,
-#         "appointments": appointments,
-#         "doctors": doctors,
-#     }
-#     return render(request, "doctor_dashboard.html", context)
-
 @login_required
 def doctor_dashboard_view(request):
-    # Check if the logged-in user is a doctor
-    if request.user.user_type != 'doctor':
-        messages.error(request, "You are not authorized to view this page.")
-        return redirect('home')
-
-    # Ensure you are getting the Doctor instance for the logged-in user
     try:
         doctor = Doctor.objects.get(user=request.user)
     except Doctor.DoesNotExist:
-        messages.error(request, "Doctor profile not found.")
-        return redirect('home')  # Or any other page
+        messages.error(request, "You are not authorized to view this page.")
+        return redirect("home")  # Redirect to the home page or an appropriate page
 
-    # Query appointments associated with this doctor
+    # Retrieve appointments related to the doctor
     appointments = Appointment.objects.filter(doctor=doctor)
 
+    # Fetch all doctors for the doctor list
+    doctors = Doctor.objects.all()
+
     context = {
+        "user": request.user,
         "doctor": doctor,
         "appointments": appointments,
+        "doctors": doctors,
     }
-
     return render(request, "doctor_dashboard.html", context)
-
 
 
 @login_required
