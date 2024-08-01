@@ -41,6 +41,7 @@ urlpatterns = [
     path("add_patient/", add_patient, name="add_patient"),
     path("error/", error_page, name="error_page"),
     path("profile/", profile_view, name="profile"),
+    path("profile/<int:doctor_id>/", profile_view, name="profile"),
     path("logout/", logout_view, name="logout"),
     path("view_doctor/<int:doctor_id>/", view_doctor_view, name="view_doctor"),
     path("edit_doctor/<int:doctor_id>/", edit_doctor_view, name="edit_doctor"),
