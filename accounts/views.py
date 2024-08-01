@@ -393,18 +393,25 @@ def delete_doctor_view(request, doctor_id):
 
 @login_required
 def update_doctor_profile_view(request):
-    if request.method == 'POST':
-        form = DoctorProfileForm(request.POST, request.FILES, instance=request.user.doctor)
+    try:
+        doctor = get_object_or_404(Doctor, user=request.user)
+    except Doctor.DoesNotExist:
+        messages.error(request, "Doctor profile does not exist.")
+        return redirect("home")
+
+    if request.method == "POST":
+        form = DoctorProfileForm(request.POST, request.FILES, instance=doctor)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Profile updated successfully!')
-            # Redirect to the doctor profile page
-            return redirect('profile', doctor_id=request.user.doctor.id)
-        else:
-            messages.error(request, 'Please correct the errors below.')
+            messages.success(request, "Profile updated successfully!")
+            return redirect("profile")
     else:
-        form = DoctorProfileForm(instance=request.user.doctor)
-    return render(request, 'update_doctor_profile.html', {'form': form})
+        form = DoctorProfileForm(instance=doctor)
+
+    context = {
+        "form": form,
+    }
+    return render(request, "update_doctor_profile.html", context)
 
 
 def view_doctor_view(request, doctor_id):
