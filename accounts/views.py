@@ -399,7 +399,7 @@ def update_doctor_profile_view(request):
             form.save()
             messages.success(request, 'Profile updated successfully!')
             # Redirect to the doctor profile page
-            return redirect('doctor_profile', doctor_id=request.user.doctor.id)
+            return redirect('profile', doctor_id=request.user.doctor.id)
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
