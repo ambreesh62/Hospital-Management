@@ -293,10 +293,10 @@ def error_page(request):
 #     return redirect("home")
 
 @login_required
-def profile_view(request):
+def profile_view(request, doctor_id=None):
     try:
         if request.user.user_type == 'doctor':
-            profile = get_object_or_404(Doctor, user=request.user)
+            profile = get_object_or_404(Doctor, id=doctor_id)
         elif request.user.user_type == 'patient':
             profile = get_object_or_404(Patient, user=request.user)
         else:
