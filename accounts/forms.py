@@ -38,7 +38,12 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class SignUpForm(UserCreationForm):
-    profile_picture = forms.ImageField(required=False) 
+    USER_TYPE_CHOICES = (
+        ('doctor', 'Doctor'),
+        ('patient', 'Patient'),
+    )
+    user_type = forms.ChoiceField(choices=USER_TYPE_CHOICES, required=True)
+    profile_picture = forms.ImageField(required=False)
     address_line1 = forms.CharField(max_length=255, required=False)
     city = forms.CharField(max_length=100, required=False)
     state = forms.CharField(max_length=100, required=False)
@@ -46,7 +51,10 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'profile_picture','address_line1', 'city', 'state', 'pincode')
+        fields = (
+            'username', 'email', 'password1', 'password2',
+            'profile_picture', 'address_line1', 'city', 'state', 'pincode', 'user_type'
+        )
 
 
 class CustomLoginForm(AuthenticationForm):

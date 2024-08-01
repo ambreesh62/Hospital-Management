@@ -31,7 +31,12 @@ def signup_view(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            user_type = form.cleaned_data.get('user_type')
+            if user_type == 'doctor':
+                Doctor.objects.create(user=user)
+            elif user_type == 'patient':
+                Patient.objects.create(user=user)
             messages.success(request, 'Account created successfully! Please log in.')
             return redirect('login')
         else:
@@ -42,7 +47,7 @@ def signup_view(request):
                     messages.error(request, f"Error in {field}: {error.message}")
     else:
         form = SignUpForm()
-    
+
     return render(request, 'signup.html', {'form': form})
 
 def login_view(request):
