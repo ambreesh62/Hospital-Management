@@ -404,7 +404,7 @@ def update_doctor_profile_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Profile updated successfully!")
-            return redirect("profile")
+            return redirect("doctor_profile")
     else:
         form = DoctorProfileForm(instance=doctor)
 
