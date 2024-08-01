@@ -268,18 +268,38 @@ def error_page(request):
     return render(request, "error.html")
 
 
+# @login_required
+# def profile_view(request):
+#     doctor = get_object_or_404(Doctor, user=request.user)
+#     context = {
+#         "doctor": doctor,
+#     }
+#     return render(request, "doctor_profile.html", context)
+
+
+# def logout_view(request):
+#     logout(request)
+#     return redirect("home")
+
 @login_required
 def profile_view(request):
-    doctor = get_object_or_404(Doctor, user=request.user)
+    try:
+        if request.user.user_type == 'doctor':
+            profile = get_object_or_404(Doctor, user=request.user)
+        elif request.user.user_type == 'patient':
+            profile = get_object_or_404(Patient, user=request.user)
+        else:
+            messages.error(request, "User type is not recognized.")
+            return redirect("home")
+    except (Doctor.DoesNotExist, Patient.DoesNotExist):
+        messages.error(request, "Profile does not exist.")
+        return redirect("home")
+
     context = {
-        "doctor": doctor,
+        "user": request.user,
+        "profile": profile,
     }
-    return render(request, "doctor_profile.html", context)
-
-
-def logout_view(request):
-    logout(request)
-    return redirect("home")
+    return render(request, "profile.html", context)
 
 
 def patient_dashboard_view(request):
