@@ -420,12 +420,3 @@ def update_doctor_profile_view(request):
 def view_doctor_view(request, doctor_id):
     doctor = get_object_or_404(Doctor, id=doctor_id)
     return render(request, "view_doctor.html", {"doctor": doctor})
-
-@login_required
-def delete_doctor_view(request, doctor_id):
-    doctor = get_object_or_404(Doctor, id=doctor_id)
-    if request.method == "POST":
-        doctor.delete()
-        return redirect('doctor_list')  # Redirect to a list of doctors or any other relevant page
-
-    return render(request, 'delete_doctor.html', {'doctor': doctor})
