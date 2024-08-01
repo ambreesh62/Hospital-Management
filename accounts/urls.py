@@ -48,6 +48,4 @@ urlpatterns = [
     path("delete_doctor/<int:doctor_id>/", delete_doctor_view, name="delete_doctor"),
     path("update_profile/", update_doctor_profile_view, name="update_doctor_profile"),
     path("about/", about, name="about"),
-    path('doctor/profile/<int:doctor_id>/', views.doctor_profile_view, name='doctor_profile'),
-
 ]
