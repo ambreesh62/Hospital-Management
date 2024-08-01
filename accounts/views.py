@@ -15,7 +15,6 @@ from .forms import (
     PatientForm,
     AppointmentForm,
     EditDoctorProfileForm,
-    DoctorProfileForm
 )
 from .models import Doctor, Appointment
 import json
@@ -75,11 +74,6 @@ def login_view(request):
         form = AuthenticationForm()
 
     return render(request, "login.html", {"form": form})
-
-
-def logout_view(request):
-    logout(request)
-    return redirect('home') 
 
 
 # Dummy data to simulate database records
@@ -279,41 +273,18 @@ def error_page(request):
     return render(request, "error.html")
 
 
-# @login_required
-# def profile_view(request):
-#     doctor = get_object_or_404(Doctor, user=request.user)
-#     context = {
-#         "doctor": doctor,
-#     }
-#     return render(request, "doctor_profile.html", context)
-
-
-# def logout_view(request):
-#     logout(request)
-#     return redirect("home")
-
 @login_required
-def profile_view(request, doctor_id=None):
-    if doctor_id is not None:
-        try:
-            profile = get_object_or_404(Doctor, id=doctor_id)
-        except Doctor.DoesNotExist:
-            messages.error(request, "Doctor profile does not exist.")
-            return redirect("home")
-    else:
-        if request.user.user_type == 'doctor':
-            profile = get_object_or_404(Doctor, user=request.user)
-        elif request.user.user_type == 'patient':
-            profile = get_object_or_404(Patient, user=request.user)
-        else:
-            messages.error(request, "User type is not recognized.")
-            return redirect("home")
-
+def profile_view(request):
+    doctor = get_object_or_404(Doctor, user=request.user)
     context = {
-        "profile": profile,
+        "doctor": doctor,
     }
-    return render(request, "profile.html", context)
+    return render(request, "doctor_profile.html", context)
 
+
+def logout_view(request):
+    logout(request)
+    return redirect("home")
 
 
 def patient_dashboard_view(request):
@@ -326,13 +297,13 @@ def patient_dashboard_view(request):
     return render(request, "patient_dashboard.html", context)
 
 
-
+@login_required
 def doctor_dashboard_view(request):
     try:
-        doctor = Doctor.objects.get(user=request.user)
+        doctor = get_object_or_404(Doctor, user=request.user)
     except Doctor.DoesNotExist:
         messages.error(request, "You are not authorized to view this page.")
-        return redirect("home")  # Redirect to the home page or an appropriate page
+        return redirect("home")  # Or any other page
 
     # Retrieve appointments related to the doctor
     appointments = Appointment.objects.filter(doctor=doctor)
@@ -396,20 +367,15 @@ def delete_doctor_view(request, doctor_id):
 
 @login_required
 def update_doctor_profile_view(request):
-    try:
-        doctor = get_object_or_404(Doctor, user=request.user)
-    except Doctor.DoesNotExist:
-        messages.error(request, "Doctor profile does not exist.")
-        return redirect("home")
-
+    doctor = get_object_or_404(Doctor, user=request.user)
     if request.method == "POST":
-        form = DoctorProfileForm(request.POST, request.FILES, instance=doctor)
+        form = EditDoctorProfileForm(request.POST, request.FILES, instance=doctor)
         if form.is_valid():
             form.save()
-            messages.success(request, "Profile updated successfully!")
-            return redirect("doctor_profile")
+            messages.success(request, "Profile updated successfully.")
+            return redirect("doctor_profile")  # Redirect to the profile view
     else:
-        form = DoctorProfileForm(instance=doctor)
+        form = EditDoctorProfileForm(instance=doctor)
 
     context = {
         "form": form,
