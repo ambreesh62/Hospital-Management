@@ -427,7 +427,11 @@ def doctor_blogs_view(request):
 
 def view_blog_view(request):
     categories = Category.objects.all()
-    return render(request, 'view_blog.html', {'categories': categories})
+    context = {
+        'categories': categories,
+        'filtered_posts': {category: category.blogpost_set.filter(is_draft=False) for category in categories}
+    }
+    return render(request, 'view_blog.html', context)
 
 def category_blogs_view(request, category_id):
     category = get_object_or_404(Category, id=category_id)
