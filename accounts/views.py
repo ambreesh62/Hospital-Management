@@ -297,32 +297,32 @@ def patient_dashboard_view(request):
     return render(request, "patient_dashboard.html", context)
 
 
-import logging
+# import logging
 
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
 
-def doctor_dashboard_view(request):
-    if not request.user.is_authenticated:
-        messages.error(request, "You need to log in to view this page.")
-        return redirect("home")
+# def doctor_dashboard_view(request):
+#     if not request.user.is_authenticated:
+#         messages.error(request, "You need to log in to view this page.")
+#         return redirect("home")
 
-    try:
-        doctor = Doctor.objects.get(user=request.user)
-    except Doctor.DoesNotExist:
-        logger.error(f"Doctor not found for user: {request.user}")
-        messages.error(request, "You are not authorized to view this page.")
-        return redirect("home")
+#     try:
+#         doctor = Doctor.objects.get(user=request.user)
+#     except Doctor.DoesNotExist:
+#         logger.error(f"Doctor not found for user: {request.user}")
+#         messages.error(request, "You are not authorized to view this page.")
+#         return redirect("home")
 
-    appointments = Appointment.objects.filter(doctor=doctor)
-    doctors = Doctor.objects.all()
+#     appointments = Appointment.objects.filter(doctor=doctor)
+#     doctors = Doctor.objects.all()
 
-    context = {
-        "user": request.user,
-        "doctor": doctor,
-        "appointments": appointments,
-        "doctors": doctors,
-    }
-    return render(request, "doctor_dashboard.html", context)
+#     context = {
+#         "user": request.user,
+#         "doctor": doctor,
+#         "appointments": appointments,
+#         "doctors": doctors,
+#     }
+#     return render(request, "doctor_dashboard.html", context)
 
 
 
