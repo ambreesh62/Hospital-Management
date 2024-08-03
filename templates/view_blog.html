@@ -1,22 +1,29 @@
 {% extends 'base.html' %}
 
-{% block title %}View Blogs{% endblock %}
+{% block title %}
+View Blog - Hospital App
+{% endblock %}
 
 {% block content %}
-<h2>Blog Posts</h2>
-{% for category in categories %}
-    <h3>{{ category.name }}</h3>
-    <ul>
-        {% for blog in category.blogpost_set.filter(is_draft=False) %}
-            <li>
-                <h3>{{ blog.title }}</h3>
-                <img src="{{ blog.image.url }}" alt="{{ blog.title }}">
-                <p>{{ blog.summary|slice:":15" }}{% if blog.summary|length > 15 %}...{% endif %}</p>
-                <a href="{% url 'category_blogs' blog.category.id %}">Read More</a>
-            </li>
-        {% empty %}
-            <p>No blog posts available.</p>
-        {% endfor %}
-    </ul>
-{% endfor %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Blog Posts</h2>
+            {% for category, posts in filtered_posts.items %}
+                <h3>{{ category.name }}</h3>
+                {% for post in posts %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ post.title }}</h5>
+                            <p class="card-text">{{ post.content|truncatewords:50 }}</p>
+                            <a href="{% url 'post_detail' post.id %}" class="btn btn-primary">Read More</a>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>No blog posts available in this category.</p>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}
