@@ -1,16 +1,22 @@
 {% extends 'base.html' %}
 
-{% block title %}Blog Categories{% endblock %}
+{% block title %}View Blogs{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2>Blog Categories</h2>
-    <div class="list-group">
-        {% for category in categories %}
-            <a href="{% url 'category_blogs_view' category.id %}" class="list-group-item list-group-item-action">
-                {{ category.name }}
-            </a>
+<h2>Blog Posts</h2>
+{% for category in categories %}
+    <h3>{{ category.name }}</h3>
+    <ul>
+        {% for blog in category.blogpost_set.filter(is_draft=False) %}
+            <li>
+                <h3>{{ blog.title }}</h3>
+                <img src="{{ blog.image.url }}" alt="{{ blog.title }}">
+                <p>{{ blog.summary|slice:":15" }}{% if blog.summary|length > 15 %}...{% endif %}</p>
+                <a href="{% url 'category_blogs' blog.category.id %}">Read More</a>
+            </li>
+        {% empty %}
+            <p>No blog posts available.</p>
         {% endfor %}
-    </div>
-</div>
+    </ul>
+{% endfor %}
 {% endblock %}
