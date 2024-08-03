@@ -55,5 +55,7 @@ urlpatterns = [
     path('doctor_blog_view/', views.doctor_blog_view, name='doctor_blog_view'),
     path('view_blog/', views.view_blog_view, name='view_blog'),
     path('category_blogs/<int:category_id>/', views.category_blogs_view, name='category_blogs_view'),
+    path('post/<int:id>/', views.post_detail_view, name='post_detail'), 
+
 
 ]

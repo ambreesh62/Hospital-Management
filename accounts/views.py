@@ -418,6 +418,13 @@ def create_blog_post(request):
         form = BlogPostForm()
     return render(request, 'create_blog_post.html', {'form': form})
 
+
+
+def post_detail_view(request, id):
+    post = get_object_or_404(BlogPost, id=id)
+    return render(request, 'post_detail.html', {'post': post})
+
+
 @login_required
 def doctor_blog_view(request):
     if request.user.user_type != 'doctor':
