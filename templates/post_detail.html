@@ -1,26 +1,3 @@
-{% comment %} {% extends 'base.html' %}
-
-{% block title %}Post Detail{% endblock %}
-
-{% block content %}
-<div class="container mt-4">
-    <!-- Blog Post Detail -->
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <h1 class="display-4">{{ post.title }}</h1>
-            <p class="text-muted">By {{ post.author.get_full_name }} on {{ post.created_at|date:"F j, Y" }}</p>
-            <hr>
-            <div class="content">
-                <p>{{ post.content|linebreaks }}</p>
-            </div>
-            <hr>
-            <!-- Optional: Add a back button or related content -->
-            <a href="{% url 'view_blog' %}" class="btn btn-secondary mt-3">Back to Blog</a>
-        </div>
-    </div>
-</div>
-{% endblock %} {% endcomment %}
-
 {% extends 'base.html' %}
 
 {% block title %}Post Detail{% endblock %}
@@ -33,25 +10,9 @@
             <h1 class="display-4">{{ post.title }}</h1>
             <p class="text-muted">By {{ post.author.get_full_name }} on {{ post.created_at|date:"F j, Y" }}</p>
             <hr>
-            <!-- Display Image -->
-            {% if post.image %}
-                <img src="{{ post.image.url }}" alt="{{ post.title }}" class="img-fluid mb-3">
-            {% else %}
-                <p class="text-muted">Image: No image available</p>
-            {% endif %}
-            <!-- Display Category -->
-            <p><strong>Category:</strong> {{ post.category.name }}</p>
-            <hr>
-            <!-- Display Summary -->
-            <p><strong>Summary:</strong> {{ post.summary }}</p>
-            <hr>
-            <!-- Display Content -->
             <div class="content">
                 <p>{{ post.content|linebreaks }}</p>
             </div>
-            <hr>
-            <!-- Display Draft Status -->
-            <p><strong>Draft:</strong> {% if post.is_draft %}Yes{% else %}No{% endif %}</p>
             <hr>
             <!-- Optional: Add a back button or related content -->
             <a href="{% url 'view_blog' %}" class="btn btn-secondary mt-3">Back to Blog</a>
