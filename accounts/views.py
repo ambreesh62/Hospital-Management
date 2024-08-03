@@ -427,11 +427,12 @@ def post_detail_view(request, id):
 
 @login_required
 def doctor_blogs_view(request):
-    if request.user.is_authenticated and request.user.is_doctor:
+    if request.user.is_authenticated and request.user.user_type == 'doctor':
         blog_posts = BlogPost.objects.filter(author=request.user, is_draft=False)
         return render(request, 'doctor_blogs.html', {'blog_posts': blog_posts})
     else:
         return redirect('login')
+
 
 def view_blog_view(request):
     categories = Category.objects.all()
