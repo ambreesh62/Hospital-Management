@@ -419,11 +419,11 @@ def create_blog_post(request):
     return render(request, 'create_blog_post.html', {'form': form})
 
 @login_required
-def doctor_blogs_view(request):
+def doctor_blog_view(request):
     if request.user.user_type != 'doctor':
         return redirect('home')  # Redirect non-doctors
     blogs = BlogPost.objects.filter(author=request.user)
-    return render(request, 'doctor_blogs.html', {'blogs': blogs})
+    return render(request, 'doctor_blog.html', {'blogs': blogs})
 
 def view_blog_view(request):
     categories = Category.objects.all()

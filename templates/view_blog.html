@@ -16,7 +16,7 @@ View Blog - Hospital App
                         <div class="card-body">
                             <h5 class="card-title">{{ post.title }}</h5>
                             <p class="card-text">{{ post.content|truncatewords:50 }}</p>
-                            <a href="{% url 'post_detail' post.id %}" class="btn btn-primary">Read More</a>
+                            <a href="{% url 'create_blog_post' post.id %}" class="btn btn-primary">Read More</a>
                         </div>
                     </div>
                 {% empty %}
