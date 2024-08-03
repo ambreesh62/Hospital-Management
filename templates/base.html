@@ -460,10 +460,6 @@ textarea {
             <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        {% if user.is_doctor %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'create_blog' %}">Create Blog</a>
-                        </li>
                         <a class="nav-link" href="{% url 'profile' %}">Profile</a>
                     </li>
                     <li class="nav-item">
