@@ -457,7 +457,7 @@ textarea {
                     <a class="nav-link" href="{% url 'patient_dashboard' %}">Patient Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'create_blog_post' %}">Create Blog</a>
+                    <a class="nav-link" href="{% url 'create_blog_post' %}">Post Blog</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
@@ -494,14 +494,12 @@ textarea {
         <!-- Content from child templates will be inserted here -->
         {% endblock %}
     </div>
-    <div>
-        <footer class="bg-dark text-white text-center py-3">
-            <p>&copy;  2024 My Hospital App. All rights reserved.Developed by Ambreesh Kumar</p>
-            <p>
-                <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
-            </p>
-        </footer>
-    </div>    
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy;  2024 My Hospital App. All rights reserved.Developed by Ambreesh Kumar</p>
+        <p>
+            <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+        </p>
+    </footer>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
