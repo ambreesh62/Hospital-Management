@@ -425,9 +425,9 @@ def doctor_blogs_view(request):
     blogs = BlogPost.objects.filter(author=request.user)
     return render(request, 'doctor_blogs.html', {'blogs': blogs})
 
-def patient_blogs_view(request):
+def view_blog_view(request):
     categories = Category.objects.all()
-    return render(request, 'patient_blogs.html', {'categories': categories})
+    return render(request, 'view_blog.html', {'categories': categories})
 
 def category_blogs_view(request, category_id):
     category = get_object_or_404(Category, id=category_id)

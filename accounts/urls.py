@@ -53,7 +53,7 @@ urlpatterns = [
     # new
     path('create_blog_post/', views.create_blog_post, name='create_blog_post'),
     path('doctor_blogs/', views.doctor_blogs_view, name='doctor_blogs_view'),
-    path('patient_blogs/', views.patient_blogs_view, name='patient_blogs_view'),
+    path('view_blog/', views.view_blog_view, name='view_blog'),
     path('category_blogs/<int:category_id>/', views.category_blogs_view, name='category_blogs_view'),
 
 ]
