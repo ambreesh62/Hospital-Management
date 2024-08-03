@@ -450,12 +450,6 @@ textarea {
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'home' %}">Home</a>
                 </li>
-                {% if user.is_authenticated %}
-                {% if user.user_type == 'doctor' %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'create_blog_post' %}">Create Blog</a>
-                    </li>
-                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'doctor_dashboard' %}">Doctor Dashboard</a>
                 </li>
@@ -466,6 +460,10 @@ textarea {
             <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
+                        {% if user.is_doctor %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'create_blog' %}">Create Blog</a>
+                        </li>
                         <a class="nav-link" href="{% url 'profile' %}">Profile</a>
                     </li>
                     <li class="nav-item">
@@ -499,8 +497,11 @@ textarea {
     </div>
 
     <footer class="bg-dark text-white text-center py-3">
-        <p>&copy; Hospital Developed by Ambreesh Kumar</p>
+        <p>&copy;  2024 My Hospital App. All rights reserved.Developed by Ambreesh Kumar</p>
     </footer>
+    <p>
+        <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+    </p>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
