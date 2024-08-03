@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ category.name }} Blogs{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{{ category.name }} Blogs</h2>
+    <div class="row">
+        {% for blog in blogs %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <img src="{{ blog.image.url }}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ blog.title }}</h5>
+                        <p class="card-text">{{ blog.summary|truncatewords:15 }}...</p>
+                        <a href="{% url 'view_blog_post' blog.id %}" class="btn btn-primary">Read More</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

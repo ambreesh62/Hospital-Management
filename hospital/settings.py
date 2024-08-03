@@ -55,10 +55,20 @@ TEMPLATES = [
 WSGI_APPLICATION = "hospital.wsgi.application"
 
 # Database
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "hospital",
+        "USER": "bikram",
+        "PASSWORD": "1122",
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
 DATABASES["default"] = dj_database_url.parse(config("DATABASE_URL"))

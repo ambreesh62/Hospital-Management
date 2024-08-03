@@ -392,3 +392,44 @@ def update_doctor_profile_view(request):
 def view_doctor_view(request, doctor_id):
     doctor = get_object_or_404(Doctor, id=doctor_id)
     return render(request, "view_doctor.html", {"doctor": doctor})
+
+
+
+# Integrate a blog system within the application created in the previous task. 
+# The doctors can upload new blog posts and the patients can view them. 
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .forms import BlogPostForm
+from .models import BlogPost, Category
+
+@login_required
+def create_blog_post(request):
+    if request.user.user_type != 'doctor':
+        return redirect('home')  # Redirect non-doctors
+    if request.method == 'POST':
+        form = BlogPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            blog_post = form.save(commit=False)
+            blog_post.author = request.user
+            blog_post.save()
+            return redirect('doctor_dashboard')
+    else:
+        form = BlogPostForm()
+    return render(request, 'create_blog_post.html', {'form': form})
+
+@login_required
+def doctor_blogs_view(request):
+    if request.user.user_type != 'doctor':
+        return redirect('home')  # Redirect non-doctors
+    blogs = BlogPost.objects.filter(author=request.user)
+    return render(request, 'doctor_blogs.html', {'blogs': blogs})
+
+def patient_blogs_view(request):
+    categories = Category.objects.all()
+    return render(request, 'patient_blogs.html', {'categories': categories})
+
+def category_blogs_view(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    blogs = BlogPost.objects.filter(category=category, is_draft=False)
+    return render(request, 'category_blogs.html', {'category': category, 'blogs': blogs})

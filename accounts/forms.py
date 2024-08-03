@@ -1,10 +1,12 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser
+from .models import CustomUser, BlogPost
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 import re
 from django.contrib.auth.forms import AuthenticationForm
+# from .models import BlogPost, Category
+
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -102,3 +104,9 @@ class DoctorProfileForm(forms.ModelForm):
     class Meta:
         model = Doctor
         fields = ['specialty', 'available_times', 'profile_picture', 'bio']
+
+
+class BlogPostForm(forms.ModelForm):
+    class Meta:
+        model = BlogPost
+        fields = ['title', 'image', 'category', 'summary', 'content', 'is_draft']

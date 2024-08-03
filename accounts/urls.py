@@ -50,4 +50,10 @@ urlpatterns = [
     path("about/", about, name="about"),
     path('profile/<int:doctor_id>/', views.profile_view, name='doctor_profile'),  # Handles a specific doctor's profile
 
+    # new
+    path('create_blog_post/', views.create_blog_post, name='create_blog_post'),
+    path('doctor_blogs/', views.doctor_blogs_view, name='doctor_blogs_view'),
+    path('patient_blogs/', views.patient_blogs_view, name='patient_blogs_view'),
+    path('category_blogs/<int:category_id>/', views.category_blogs_view, name='category_blogs_view'),
+
 ]

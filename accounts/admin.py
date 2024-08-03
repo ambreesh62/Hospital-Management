@@ -65,3 +65,9 @@ admin.site.register(CustomUser, CustomUserAdmin)
 #     list_display = ('user', 'date_of_birth', 'gender', 'address')  # Make sure these fields exist in your model
 
 # admin.site.register(Patient, PatientAdmin)
+
+
+from .models import BlogPost, Category
+
+admin.site.register(BlogPost)
+admin.site.register(Category)
