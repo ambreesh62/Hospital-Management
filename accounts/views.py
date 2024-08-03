@@ -203,7 +203,7 @@ def cancel_appointment(request, id):
 def about(request):
     return render(request, "about.html")
 
-
+@login_required
 def doctor_dashboard_view(request):
     # Ensure you are getting the Doctor instance for the logged-in user
     try:
