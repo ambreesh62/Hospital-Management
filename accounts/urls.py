@@ -52,7 +52,7 @@ urlpatterns = [
 
     # new
     path('create_blog_post/', views.create_blog_post, name='create_blog_post'),
-    path('doctor_blog_view/', views.doctor_blog_view, name='doctor_blog_view'),
+    path('doctor_blogs/', views.doctor_blogs_view, name='doctor_blogs'),
     path('view_blog/', views.view_blog_view, name='view_blog'),
     path('category_blogs/<int:category_id>/', views.category_blogs_view, name='category_blogs_view'),
     path('post/<int:id>/', views.post_detail_view, name='post_detail'), 

@@ -426,11 +426,12 @@ def post_detail_view(request, id):
 
 
 @login_required
-def doctor_blog_view(request):
-    if request.user.user_type != 'doctor':
-        return redirect('home')  # Redirect non-doctors
-    blogs = BlogPost.objects.filter(author=request.user)
-    return render(request, 'doctor_blog.html', {'blogs': blogs})
+def doctor_blogs_view(request):
+    if request.user.is_authenticated and request.user.is_doctor:
+        blog_posts = BlogPost.objects.filter(author=request.user, is_draft=False)
+        return render(request, 'doctor_blogs.html', {'blog_posts': blog_posts})
+    else:
+        return redirect('login')
 
 def view_blog_view(request):
     categories = Category.objects.all()
