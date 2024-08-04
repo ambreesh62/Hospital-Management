@@ -418,3 +418,21 @@ def category_blogs_view(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     blogs = BlogPost.objects.filter(category=category, is_draft=False)
     return render(request, 'category_blogs.html', {'category': category, 'blogs': blogs})
+
+
+@login_required
+def edit_blog_post(request, post_id):
+    post = get_object_or_404(BlogPost, id=post_id)
+    
+    if post.author != request.user and request.user.user_type != 'doctor':
+        return redirect('home')  # Redirect non-owners
+
+    if request.method == 'POST':
+        form = BlogPostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('post_detail', post_id=post.id)  # Redirect to the post detail page
+    else:
+        form = BlogPostForm(instance=post)
+
+    return render(request, 'edit_blog_post.html', {'form': form, 'post': post})

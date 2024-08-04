@@ -31,7 +31,14 @@
             <hr>
             <!-- Optional: Add a back button or related content -->
             <a href="{% url 'view_blog' %}" class="btn btn-secondary mt-3">Back to Blog</a>
+            <a href="{% url 'edit_blog_post' post.id %}" class="btn btn-warning mt-3">Edit Post</a>
         </div>
     </div>
 </div>
 {% endblock %}
+<style>
+    .custom-img {
+        max-width: 100%;
+        height: auto;
+    }
+</style>    

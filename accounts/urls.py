@@ -22,6 +22,7 @@ from .views import (
     add_patient,
     error_page,
     about,
+    edit_blog_post,
 )
 
 urlpatterns = [
@@ -56,6 +57,8 @@ urlpatterns = [
     path('view_blog/', views.view_blog_view, name='view_blog'),
     path('category_blogs/<int:category_id>/', views.category_blogs_view, name='category_blogs_view'),
     path('post/<int:id>/', views.post_detail_view, name='post_detail'), 
+    path('edit_blog_post/<int:post_id>/', edit_blog_post, name='edit_blog_post'),
+
 
 
 ]
