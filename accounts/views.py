@@ -221,7 +221,7 @@ def about(request):
 #     )
 
 @login_required
-def doctor_dashboard(request):
+def doctor_dashboard_view(request):
     # Fetch appointments for the logged-in doctor
     appointments = Appointment.objects.filter(doctor=request.user)
     
