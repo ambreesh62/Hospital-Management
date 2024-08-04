@@ -427,6 +427,7 @@ def edit_blog_post(request, post_id):
         form = BlogPostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Blog post edited successfully!')
             return redirect(reverse('post_detail', kwargs={'id': post_id}))
     else:
         form = BlogPostForm(instance=post)
