@@ -203,22 +203,37 @@ def cancel_appointment(request, id):
 def about(request):
     return render(request, "about.html")
 
+# @login_required
+# def doctor_dashboard_view(request):
+#     # Ensure you are getting the Doctor instance for the logged-in user
+#     try:
+#         doctor = Doctor.objects.get(user=request.user)
+#     except Doctor.DoesNotExist:
+#         return render(request, "error.html", {"message": "Doctor profile not found."})
+
+#     # Query appointments associated with this doctor
+#     appointments = Appointment.objects.filter(doctor=doctor)
+
+#     return render(
+#         request,
+#         "doctor_dashboard.html",
+#         {"doctor": doctor, "appointments": appointments},
+#     )
+
 @login_required
-def doctor_dashboard_view(request):
-    # Ensure you are getting the Doctor instance for the logged-in user
-    try:
-        doctor = Doctor.objects.get(user=request.user)
-    except Doctor.DoesNotExist:
-        return render(request, "error.html", {"message": "Doctor profile not found."})
-
-    # Query appointments associated with this doctor
-    appointments = Appointment.objects.filter(doctor=doctor)
-
-    return render(
-        request,
-        "doctor_dashboard.html",
-        {"doctor": doctor, "appointments": appointments},
-    )
+def doctor_dashboard(request):
+    # Fetch appointments for the logged-in doctor
+    appointments = Appointment.objects.filter(doctor=request.user)
+    
+    # Fetch all doctors (or adjust the query as needed)
+    doctors = Doctor.objects.all()
+    
+    context = {
+        'appointments': appointments,
+        'doctors': doctors,
+    }
+    
+    return render(request, 'doctor_dashboard.html', context)
 
 
 @login_required
