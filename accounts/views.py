@@ -384,6 +384,7 @@ def create_blog_post(request):
             blog_post = form.save(commit=False)
             blog_post.author = request.user
             blog_post.save()
+            messages.success(request, 'Blog post created successfully!')
             return redirect('doctor_dashboard')
     else:
         form = BlogPostForm()
