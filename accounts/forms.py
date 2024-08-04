@@ -50,11 +50,13 @@ class SignUpForm(UserCreationForm):
     city = forms.CharField(max_length=100, required=False)
     state = forms.CharField(max_length=100, required=False)
     pincode = forms.CharField(max_length=10, required=False)
+    first_name = forms.CharField(max_length=30, required=True, label='First Name')
+    last_name = forms.CharField(max_length=30, required=True, label='Last Name')
 
     class Meta:
         model = CustomUser
         fields = (
-            'username', 'email', 'password1', 'password2',
+            'first_name', 'last_name','username', 'email', 'password1', 'password2',
             'profile_picture', 'address_line1', 'city', 'state', 'pincode', 'user_type'
         )
 
