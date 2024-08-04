@@ -222,8 +222,10 @@ def about(request):
 
 @login_required
 def doctor_dashboard_view(request):
+    doctor = get_object_or_404(Doctor, user=request.user)
+    
     # Fetch appointments for the logged-in doctor
-    appointments = Appointment.objects.filter(doctor=request.user)
+    appointments = Appointment.objects.filter(doctor=doctor)
     
     # Fetch all doctors (or adjust the query as needed)
     doctors = Doctor.objects.all()
