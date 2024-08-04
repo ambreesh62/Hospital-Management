@@ -3,17 +3,27 @@
 {% block title %}My Blog Posts{% endblock %}
 
 {% block content %}
-<h2>My Blog Posts</h2>
-<ul>
-    {% for blog in blogs %}
-        <li>
-            <h3>{{ blog.title }}</h3>
-            <img src="{{ blog.image.url }}" alt="{{ blog.title }}">
-            <p>{{ blog.summary }}</p>
-            <a href="{% url 'category_blogs' blog.category.id %}">View Category</a>
-        </li>
-    {% empty %}
+<div class="container mt-4">
+    <h1>My Blog Posts</h1>
+    {% if blog_posts %}
+        <div class="list-group">
+            {% for post in blog_posts %}
+                <div class="list-group-item mb-4">
+                    <h2 class="mb-2">{{ post.title }}</h2>
+                    <p class="text-muted mb-2">Category: {{ post.category.name }}</p>
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="img-fluid mb-3">
+                    {% else %}
+                        <p class="text-muted">Image: No image available</p>
+                    {% endif %}
+                    <p><strong>Summary:</strong> {{ post.summary }}</p>
+                    <p><strong>Draft:</strong> {% if post.is_draft %}Yes{% else %}No{% endif %}</p>
+                    <a href="{% url 'post_detail' post.id %}" class="btn btn-primary mt-3">Read More</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
         <p>No blog posts available.</p>
-    {% endfor %}
-</ul>
+    {% endif %}
+</div>
 {% endblock %}
