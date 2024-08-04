@@ -7,8 +7,9 @@ Doctor Dashboard
 {% block content %}
 <div class="container mt-4">
     <h1>Doctor Dashboard</h1>
+    <h3>Welcome, Dr. {{ user.first_name }} {{ user.last_name }}!</h3>
     <a href="{% url 'add_doctor' %}" class="btn btn-primary">Add Doctor</a>
-    <p>Welcome, Dr. {{ user.first_name }} {{ user.last_name }}!</p>
+    
 
     <!-- Appointments Section -->
     <div class="card mt-4">

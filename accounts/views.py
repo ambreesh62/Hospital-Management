@@ -16,7 +16,7 @@ from .forms import (
     AppointmentForm,
     EditDoctorProfileForm,
 )
-from .models import Doctor, Appointment
+from .models import Doctor, Appointment,CustomUser
 import json
 from .forms import SignUpForm
 from django.contrib.auth.models import Group
@@ -213,11 +213,13 @@ def doctor_dashboard_view(request):
     
     # Fetch all doctors (or adjust the query as needed)
     doctors = Doctor.objects.all()
+    user = CustomUser.objects.get(id=request.user.id)
+
     
     context = {
         'appointments': appointments,
         'doctors': doctors,
-        'user': request.user,
+        'user': user,
     }
     
     return render(request, 'doctor_dashboard.html', context)
