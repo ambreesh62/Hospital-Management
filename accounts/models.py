@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.contrib.auth import get_user_model
 
 
 class CustomUser(AbstractUser):
@@ -50,7 +49,6 @@ class Doctor(models.Model):
     def __str__(self):
         return f"Dr. {self.user.first_name} {self.user.last_name}"  # Use attributes that actually exist
 
-User = get_user_model()
 
 class Patient(models.Model):
     user = models.ForeignKey(
