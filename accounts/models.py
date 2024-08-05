@@ -55,7 +55,6 @@ class Patient(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1
     )
     name = models.CharField(max_length=100)
-    age = models.IntegerField()
     gender = models.CharField(max_length=10)
     medical_history = models.TextField()
     address = models.TextField(default="No address provided")  # Default address

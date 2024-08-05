@@ -81,7 +81,7 @@ class DoctorForm(forms.ModelForm):
 class PatientForm(forms.ModelForm):
     class Meta:
         model = Patient
-        fields = ["user", "name", "age", "medical_history", "gender", "address"]
+        fields = ["user", "name",  "medical_history", "gender", "address"]
 
 
 # forms.py
