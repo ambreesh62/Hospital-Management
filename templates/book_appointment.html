@@ -6,7 +6,7 @@ Book Appointment - Hospital App
 
 {% block content %}
 <div class="container mt-4">
-    <h1 class="text-center mb-4">Book Appointment with Dr. {{ doctor.first_name }} {{ doctor.last_name }}</h1>
+    <h2>Book Appointment with Dr. {{ doctor.user.get_full_name }}</h2>
     <form method="post">
         {% csrf_token %}
         <div class="form-group">
