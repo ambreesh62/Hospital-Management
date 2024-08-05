@@ -231,7 +231,7 @@ def book_appointment(request, doctor_id):
     if request.method == "POST":
         date = request.POST.get("date")
         time = request.POST.get("time")
-        status = request.POST.get('status')
+        status = request.POST.get("status")
 
         # Ensure the user has a related Patient profile
         try:
