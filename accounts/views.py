@@ -227,10 +227,7 @@ def doctor_dashboard_view(request):
 
 @login_required
 def book_appointment(request, doctor_id):
-    doctor = CustomUser.objects.filter(id=doctor_id, user_type='Doctor').first()
-    if not doctor:
-        raise Http404("No Doctor matches the given query.")
-    
+    doctor = get_object_or_404(CustomUser, id=doctor_id, user_type='Doctor')
     if request.method == "POST":
         date = request.POST.get("date")
         time = request.POST.get("time")
