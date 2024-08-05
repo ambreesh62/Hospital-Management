@@ -157,7 +157,7 @@ def create_appointment(request):
         messages.success(request, "Appointment created successfully!")
         return redirect("patient_dashboard")  # Adjust redirection as needed
 
-    return render(request, "create_appointment.html")
+    return render(request, "create_appointment.html", appointment)
 
 
 @login_required
