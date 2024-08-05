@@ -227,28 +227,34 @@ def doctor_dashboard_view(request):
 
 @login_required
 def book_appointment(request, doctor_id):
-    doctor = get_object_or_404(Doctor, id=doctor_id)
+    doctor = get_object_or_404(CustomUser, id=doctor_id, user_type='Doctor')
+    
     if request.method == "POST":
-        date = request.POST.get("date")
-        time = request.POST.get("time")
-        status = request.POST.get('status')
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            # Ensure the user has a related Patient profile
+            try:
+                patient_profile = Patient.objects.get(user=request.user)
+            except Patient.DoesNotExist:
+                messages.error(request, "Patient profile not found.")
+                return redirect("error_page")  # Adjust this to your actual error handling URL
 
-        # Ensure the user has a related Patient profile
-        try:
-            patient = Patient.objects.get(user=request.user)
-        except Patient.DoesNotExist:
-            messages.error(request, "Patient profile not found.")
-            return redirect(
-                "error_page"
-            )  # Adjust this to your actual error handling URL
+            # Create the appointment
+            Appointment.objects.create(
+                doctor=doctor,
+                patient=request.user,  # Use CustomUser instance directly
+                date=form.cleaned_data["date"],
+                time=form.cleaned_data["time"],
+                status=form.cleaned_data["status"]
+            )
 
-        # Create the appointment
-        Appointment.objects.create(doctor=doctor, patient=patient, date=date, time=time, status=status)
+            messages.success(request, "Appointment booked successfully!")
+            return redirect("doctor_dashboard")  # Adjust redirection as needed
 
-        messages.success(request, "Appointment booked successfully!")
-        return redirect("doctor_dashboard")  # Adjust redirection as needed
+    else:
+        form = AppointmentForm()
 
-    return render(request, "book_appointment.html", {"doctor": doctor})
+    return render(request, "book_appointment.html", {"doctor": doctor, "form": form})
 
 
 def add_doctor(request):
