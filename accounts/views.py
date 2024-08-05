@@ -232,10 +232,6 @@ def book_appointment(request, doctor_id):
     if request.method == "POST":
         form = AppointmentForm(request.POST)
         if form.is_valid():
-            date = form.cleaned_data["date"]
-            time = form.cleaned_data["time"]
-            status = form.cleaned_data["status"]
-
             # Ensure the user has a related Patient profile
             try:
                 patient_profile = Patient.objects.get(user=request.user)
@@ -247,9 +243,9 @@ def book_appointment(request, doctor_id):
             Appointment.objects.create(
                 doctor=doctor,
                 patient=request.user,  # Use CustomUser instance directly
-                date=date,
-                time=time,
-                status=status
+                date=form.cleaned_data["date"],
+                time=form.cleaned_data["time"],
+                status=form.cleaned_data["status"]
             )
 
             messages.success(request, "Appointment booked successfully!")
