@@ -460,23 +460,3 @@ def appointment_confirmation_view(request, appointment_id):
     return render(request, 'appointment_confirmation.html', context)
 
 
-
-def create_google_calendar_event(appointment):
-    creds = Credentials.from_authorized_user_file('token.json', ['https://www.googleapis.com/auth/calendar'])
-    service = build('calendar', 'v3', credentials=creds)
-    
-    event = {
-        'summary': f'Appointment with Dr. {appointment.doctor.get_full_name()}',
-        'description': f'Specialty: {appointment.specialty}',
-        'start': {
-            'dateTime': f'{appointment.date}T{appointment.start_time}',
-            'timeZone': 'UTC',
-        },
-        'end': {
-            'dateTime': f'{appointment.date}T{appointment.end_time}',
-            'timeZone': 'UTC',
-        },
-    }
-
-    event = service.events().insert(calendarId='primary', body=event).execute()
-    return event
