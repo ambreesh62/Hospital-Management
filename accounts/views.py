@@ -209,11 +209,13 @@ def about(request):
 def doctor_dashboard_view(request):
     doctor = get_object_or_404(Doctor, user=request.user)
     
-    appointments = Appointment.objects.filter(doctor=doctor)
+    appointments = Appointment.objects.filter(doctor=request.user)
 
     # Fetch all doctors (or adjust the query as needed)
     doctors = Doctor.objects.all()
     user = CustomUser.objects.get(id=request.user.id)
+    user = request.user
+
 
     context = {
         'appointments': appointments,
