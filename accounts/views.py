@@ -23,7 +23,8 @@ from django.contrib.auth.models import Group
 from django.contrib.auth import logout
 from .utils import create_google_calendar_event
 from datetime import datetime, timedelta
-
+from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
 
 
 
@@ -238,6 +239,7 @@ def book_appointment_view(request, doctor_id):
             appointment = form.save(commit=False)
             appointment.doctor = doctor
             appointment.patient = request.user
+            appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
             appointment.save()
             
             # Create Google Calendar event
@@ -448,6 +450,33 @@ def appointment_details(request, appointment_id):
     return render(request, 'appointment_details.html', {'appointment': appointment})
 
 @login_required
-def appointment_confirmation(request, appointment_id):
+def appointment_confirmation_view(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id)
-    return render(request, 'appointment_confirmation.html', {'appointment': appointment})
+    
+    context = {
+        'appointment': appointment,
+    }
+    
+    return render(request, 'appointment_confirmation.html', context)
+
+
+
+def create_google_calendar_event(appointment):
+    creds = Credentials.from_authorized_user_file('token.json', ['https://www.googleapis.com/auth/calendar'])
+    service = build('calendar', 'v3', credentials=creds)
+    
+    event = {
+        'summary': f'Appointment with Dr. {appointment.doctor.get_full_name()}',
+        'description': f'Specialty: {appointment.specialty}',
+        'start': {
+            'dateTime': f'{appointment.date}T{appointment.start_time}',
+            'timeZone': 'UTC',
+        },
+        'end': {
+            'dateTime': f'{appointment.date}T{appointment.end_time}',
+            'timeZone': 'UTC',
+        },
+    }
+
+    event = service.events().insert(calendarId='primary', body=event).execute()
+    return event
