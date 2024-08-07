@@ -240,7 +240,7 @@ def book_appointment_view(request, doctor_id):
         form = AppointmentForm(request.POST)
         if form.is_valid():
             appointment = form.save(commit=False)
-            appointment.doctor = doctor.user
+            appointment.doctor = doctor
             appointment.patient = request.user
             appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
             appointment.save()
