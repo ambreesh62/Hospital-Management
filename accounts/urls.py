@@ -60,6 +60,8 @@ urlpatterns = [
     path('book_appointment/<int:doctor_id>/', views.book_appointment_view, name='book_appointment'),
 
     path('appointment-confirmation/<int:appointment_id>/', views.appointment_confirmation_view, name='appointment_confirmation'),
+    path('doctor_dashboard/<int:doctor_id>/', doctor_dashboard_view, name='doctor_dashboard'),
+
 
     
 
