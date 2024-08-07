@@ -25,7 +25,7 @@ Patient Dashboard - Hospital App
                 <div class="list-group-item">
                     <h5 class="mb-1">{{ doctor.user.get_full_name }}</h5>
                     <p class="mb-1">Specialty: {{ doctor.specialty }}</p>
-                    <a href="{% url 'book_appointment' doctor.id %}" class="btn btn-primary">Book Appointment</a>
+                    <a href="{% url 'book_appointment' doctor.id,doctor.username %}" class="btn btn-primary">Book Appointment</a>
                 </div>
                 {% empty %}
                 <p>No doctors available at the moment.</p>
