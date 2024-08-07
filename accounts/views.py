@@ -213,19 +213,18 @@ def about(request):
 
 @login_required
 def doctor_dashboard_view(request):
-    # Get the logged-in user's Doctor instance
     doctor = get_object_or_404(Doctor, user=request.user)
     
-    # Fetch appointments for this doctor
-    appointments = Appointment.objects.filter(doctor=doctor)
-    
-    # Fetch all doctors (or adjust as needed)
+    appointments = Appointment.objects.filter(doctor=request.user)
+
+    # Fetch all doctors (or adjust the query as needed)
     doctors = Doctor.objects.all()
+    user = CustomUser.objects.get(id=request.user.id)
 
     context = {
         'appointments': appointments,
         'doctors': doctors,
-        'user': request.user,  # Use request.user directly
+        'user': user,
     }
     
     return render(request, 'doctor_dashboard.html', context)
