@@ -25,6 +25,8 @@ from .utils import create_google_calendar_event
 from datetime import datetime, timedelta
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
+import google.auth.exceptions
+
 
 
 
@@ -231,6 +233,7 @@ def doctor_dashboard_view(request):
 
 
 @login_required
+@login_required
 def book_appointment_view(request, doctor_id):
     doctor = get_object_or_404(CustomUser, id=doctor_id)
     if request.method == "POST":
@@ -242,10 +245,15 @@ def book_appointment_view(request, doctor_id):
             appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
             appointment.save()
             
-            # Create Google Calendar event
-            create_google_calendar_event(appointment)
+            try:
+                # Create Google Calendar event
+                create_google_calendar_event(appointment)
+                messages.success(request, "Appointment booked successfully!")
+            except FileNotFoundError:
+                messages.error(request, "Authorization token not found. Please complete the OAuth2 flow.")
+            except google.auth.exceptions.GoogleAuthError as e:
+                messages.error(request, f"Failed to create Google Calendar event: {e}")
             
-            messages.success(request, "Appointment booked successfully!")
             return redirect('appointment_confirmation', appointment_id=appointment.id)
     else:
         form = AppointmentForm()
