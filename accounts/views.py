@@ -226,6 +226,7 @@ def doctor_dashboard_view(request, doctor_id):
     
     context = {
         'appointments': appointments,
+        'doctor' :doctor,
         'doctors': doctors,
         'user': user,
     }
