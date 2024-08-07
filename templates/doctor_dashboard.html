@@ -9,9 +9,7 @@ Doctor Dashboard
     <h1>Doctor Dashboard</h1>
     <h3>Welcome, Dr. {{ user.first_name }} {{ user.last_name }}!</h3>
     <a href="{% url 'add_doctor' %}" class="btn btn-primary">Add Doctor</a>
-    {% if appointment %}
-    <a href="{% url 'view_appointment' appointment.id %}" class="btn btn-info">View Appointment</a>
-    {% endif %}
+    <a href="{% url 'view_appointment' appointment.id %}" class="btn btn-primary">View Appointment</a>
 
     <!-- Doctors List Section -->
     <div class="card mt-4">
