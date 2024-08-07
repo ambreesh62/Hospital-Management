@@ -92,7 +92,7 @@ from .models import Appointment
 class AppointmentForm(forms.ModelForm):
     class Meta:
         model = Appointment
-        fields = ["specialty", "date", "start_time"]
+        fields = ['date', 'start_time', 'end_time', 'specialty']  
 
 
 class EditDoctorProfileForm(forms.ModelForm):
