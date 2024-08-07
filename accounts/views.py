@@ -212,7 +212,8 @@ def about(request):
 
 
 @login_required
-def doctor_dashboard_view(request):
+def doctor_dashboard_view(request, doctor_id):
+    doctor = get_object_or_404(Doctor, id=doctor_id)
     doctor = get_object_or_404(Doctor, user=request.user)
     
     # Fetch appointments for the logged-in doctor
