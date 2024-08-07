@@ -35,9 +35,6 @@ urlpatterns = [
     path("appointment/<int:id>/", view_appointment, name="view_appointment"),
     path("appointment/<int:id>/edit/", edit_appointment, name="edit_appointment"),
     path("appointment/<int:id>/cancel/", cancel_appointment, name="cancel_appointment"),
-    path(
-        "book-appointment/<int:doctor_id>/", book_appointment, name="book_appointment"
-    ),
     path("add_doctor/", add_doctor_view, name="add_doctor"),
     path("add_patient/", add_patient, name="add_patient"),
     path("error/", error_page, name="error_page"),
@@ -61,6 +58,8 @@ urlpatterns = [
 
     # new
     path('doctors/', views.doctor_list, name='doctor_list'),
+    path('book_appointment/<int:doctor_id>/', views.book_appointment_view, name='book_appointment'),
+
     path('appointment-confirmation/<int:appointment_id>/', views.appointment_confirmation, name='appointment_confirmation'),
 
     

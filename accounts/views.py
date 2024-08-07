@@ -230,7 +230,7 @@ def doctor_dashboard_view(request):
 
 
 @login_required
-def book_appointment(request, doctor_id):
+def book_appointment_view(request, doctor_id):
     doctor = get_object_or_404(CustomUser, id=doctor_id, user_type='Doctor')
     if request.method == "POST":
         form = AppointmentForm(request.POST)
