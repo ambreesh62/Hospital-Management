@@ -92,15 +92,11 @@ from .models import Appointment
 class AppointmentForm(forms.ModelForm):
     class Meta:
         model = Appointment
-        fields = ['date', 'start_time', 'end_time', 'specialty']  
-    start_time = forms.TimeField(
-        widget=forms.TimeInput(format='%H:%M'),
-        input_formats=['%H:%M', '%I:%M%p']
-    )
-    end_time = forms.TimeField(
-        widget=forms.TimeInput(format='%H:%M'),
-        input_formats=['%H:%M', '%I:%M%p']
-    )    
+        fields = ['specialty', 'date', 'start_time']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+            'start_time': forms.TimeInput(attrs={'type': 'time'}),
+        }   
 
 
 class EditDoctorProfileForm(forms.ModelForm):
