@@ -23,7 +23,7 @@ Patient Dashboard - Hospital App
             <div class="list-group">
                 {% for doctor in doctors %}
                 <div class="list-group-item">
-                    <h5 class="mb-1">{{ doctor.user.get_full_name }}</h5>
+                    <h5 class="mb-1">{{ doctor.first_name }} {{ doctor.last_name }}</h5>
                     <p class="mb-1">Specialty: {{ doctor.specialty }}</p>
                     <a href="{% url 'book_appointment' doctor.id %}" class="btn btn-primary">Book Appointment</a>
                 </div>
