@@ -12,30 +12,21 @@ Doctor Dashboard
     
 
     <!-- Appointments Section -->
-    <div class="card mt-4">
-        <div class="card-header">
-            <h4>Appointments</h4>
-        </div>
-        <div class="card-body">
-            {% if appointments %}
-            <table class="table table-bordered table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Patient Name</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for appointment in appointments %}
-                    <tr>
-                        <td>{{ appointment.patient.get_full_name }}</td>
-                        <td>{{ appointment.date }}</td>
-                        <td>{{ appointment.time }}</td>
-                        <td>{{ appointment.status }}</td>
-                    </tr>
-                    {% endfor %}
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h3>Your Appointments</h3>
+            <div class="list-group">
+                {% for appointment in appointments %}
+                <div class="list-group-item">
+                    <h5 class="mb-1">Appointment with {{ appointment.patient.first_name }} {{ appointment.patient.last_name }}</h5>
+                    <p class="mb-1">Specialty: {{ appointment.specialty }}</p>
+                    <p class="mb-1">Date: {{ appointment.date }}</p>
+                    <p class="mb-1">Start Time: {{ appointment.start_time }}</p>
+                    <p class="mb-1">End Time: {{ appointment.end_time }}</p>
+                </div>
+                {% empty %}
+                <p>No upcoming appointments.</p>
+                {% endfor %}
                 </tbody>
             </table>
             {% else %}
