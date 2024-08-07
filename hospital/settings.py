@@ -6,6 +6,10 @@ from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, 'credentials', 'service-account-file.json')
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config("SECRET_KEY")
