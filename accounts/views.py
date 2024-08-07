@@ -450,3 +450,8 @@ def doctor_list(request):
 def appointment_details(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id, patient=request.user)
     return render(request, 'appointment_details.html', {'appointment': appointment})
+
+@login_required
+def appointment_confirmation(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id)
+    return render(request, 'appointment_confirmation.html', {'appointment': appointment})

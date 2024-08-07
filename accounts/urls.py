@@ -61,6 +61,8 @@ urlpatterns = [
 
     # new
     path('doctors/', views.doctor_list, name='doctor_list'),
+    path('appointment-confirmation/<int:appointment_id>/', views.appointment_confirmation, name='appointment_confirmation'),
+
     
 
 
