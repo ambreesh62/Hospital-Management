@@ -11,8 +11,6 @@ Doctor Dashboard
     <a href="{% url 'add_doctor' %}" class="btn btn-primary">Add Doctor</a>
     {% if appointment %}
     <a href="{% url 'view_appointment' appointment.id %}" class="btn btn-info">View Appointment</a>
-    {% else %}
-    <p>No appointments available.</p>
     {% endif %}
 
     <!-- Doctors List Section -->
