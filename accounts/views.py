@@ -24,9 +24,6 @@ from django.contrib.auth import logout
 from .utils import create_google_calendar_event
 from datetime import datetime, timedelta
 
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
 
 
 
