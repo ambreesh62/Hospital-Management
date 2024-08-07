@@ -1,37 +1,39 @@
-import os
-import google.oauth2.credentials
+import datetime
+from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from django.conf import settings
 
-TOKEN_PATH = os.path.join(settings.BASE_DIR, 'secrets', 'token.json')
-SCOPES = ['https://www.googleapis.com/auth/calendar']
-
-def get_credentials():
-    if not os.path.exists(TOKEN_PATH):
-        raise FileNotFoundError(f"The token.json file was not found at {TOKEN_PATH}")
-    
-    with open(TOKEN_PATH, 'r') as token_file:
-        credentials_info = token_file.read()
-    
-    credentials = google.oauth2.credentials.Credentials.from_authorized_user_info(credentials_info, SCOPES)
-    return credentials
-
 def create_google_calendar_event(appointment):
-    credentials = get_credentials()
+    # Load service account credentials
+    credentials = service_account.Credentials.from_service_account_file(
+        settings.SERVICE_ACCOUNT_FILE,
+        scopes=['https://www.googleapis.com/auth/calendar']
+    )
+
+    # Build the Calendar API service
     service = build('calendar', 'v3', credentials=credentials)
-    
+
+    # Combine date and time into ISO 8601 format
+    start_datetime = datetime.datetime.combine(appointment.date, appointment.start_time).isoformat()
+    end_datetime = datetime.datetime.combine(appointment.date, appointment.end_time).isoformat()
+
+    # Create an event body
     event = {
-        'summary': f'Appointment with Dr. {appointment.doctor.user.first_name} {appointment.doctor.user.last_name}',
+        'summary': f'Appointment with Dr. {appointment.doctor.first_name} {appointment.doctor.last_name}',
         'start': {
-            'dateTime': f"{appointment.date}T{appointment.start_time}",
+            'dateTime': start_datetime,
             'timeZone': 'UTC',
         },
         'end': {
-            'dateTime': f"{appointment.date}T{appointment.end_time}",
+            'dateTime': end_datetime,
             'timeZone': 'UTC',
         },
-        # Additional event details go here
+        'attendees': [
+            {'email': appointment.doctor.email},
+            {'email': appointment.patient.email},
+        ],
     }
-    
+
+    # Insert the event into the calendar
     event = service.events().insert(calendarId='primary', body=event).execute()
     return event
