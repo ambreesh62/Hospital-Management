@@ -11,7 +11,6 @@ from .views import (
     signup_view,
     login_view,
     home_view,
-    book_appointment,
     logout_view,
     update_doctor_profile_view,
     patient_dashboard_view,
