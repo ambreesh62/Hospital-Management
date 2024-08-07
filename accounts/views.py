@@ -212,8 +212,9 @@ def about(request):
 
 
 @login_required
-def doctor_dashboard_view(request, doctor_id):
-    doctor = get_object_or_404(Doctor, id=doctor_id, user=request.user)
+def doctor_dashboard_view(request):
+    doctor = get_object_or_404(Doctor, user=request.user)
+    
     # Fetch appointments for the logged-in doctor
     appointments = Appointment.objects.filter(doctor=doctor)
     
@@ -221,10 +222,9 @@ def doctor_dashboard_view(request, doctor_id):
     doctors = Doctor.objects.all()
     user = CustomUser.objects.get(id=request.user.id)
 
-    
     context = {
         'appointments': appointments,
-        'doctor' :doctor,
+        'doctor': doctor,
         'doctors': doctors,
         'user': user,
     }
@@ -232,7 +232,6 @@ def doctor_dashboard_view(request, doctor_id):
     return render(request, 'doctor_dashboard.html', context)
 
 
-@login_required
 @login_required
 def book_appointment_view(request, doctor_id):
     doctor = get_object_or_404(CustomUser, id=doctor_id)
