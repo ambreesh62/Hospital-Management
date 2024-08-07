@@ -1,32 +1,23 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Book Appointment - Hospital App
-{% endblock %}
-
 {% block content %}
-<div class="container mt-4">
-    <h2>Book Appointment with Dr. {{ doctor.user.get_full_name }}</h2>
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="date">Date</label>
-            <input type="date" class="form-control" id="date" name="date" required>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Book Appointment with Dr. {{ doctor.first_name }} {{ doctor.last_name }}</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-primary shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="mb-0">Book Appointment</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary btn-block rounded-pill">Confirm Appointment</button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="time">Time</label>
-            <input type="time" class="form-control" id="time" name="time" required>
-        </div>
-        <div class="form-group">
-            <label for="status">Status</label>
-            <select class="form-control" id="status" name="status" required>
-                <option value="" disabled selected>Select status</option>
-                <option value="confirmed">Confirmed</option>
-                <option value="pending">Pending</option>
-                <option value="canceled">Canceled</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Book Appointment</button>
-    </form>
+    </div>
 </div>
 {% endblock %}

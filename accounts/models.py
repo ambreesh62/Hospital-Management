@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from datetime import datetime, timedelta
 
 
 class CustomUser(AbstractUser):
@@ -61,14 +62,19 @@ class Patient(models.Model):
 
 
 class Appointment(models.Model):
-    doctor = models.ForeignKey("Doctor", on_delete=models.CASCADE)
-    patient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='appointments_as_doctor', on_delete=models.CASCADE)
+    patient = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='appointments_as_patient', on_delete=models.CASCADE)
+    specialty = models.CharField(max_length=100)
     date = models.DateField()
-    time = models.TimeField()
-    status = models.CharField(max_length=20)
+    start_time = models.TimeField()
+    end_time = models.TimeField(blank=True, null=True)
+    status = models.CharField(max_length=20, default='Scheduled')
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"Appointment with Dr. {self.doctor.user.get_full_name()} on {self.date} at {self.time}"
+    def save(self, *args, **kwargs):
+        if not self.end_time:
+            self.end_time = (datetime.combine(self.date, self.start_time) + timedelta(minutes=45)).time()
+        super().save(*args, **kwargs)
 
 # New
 

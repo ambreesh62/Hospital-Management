@@ -59,6 +59,11 @@ urlpatterns = [
     path('post/<int:id>/', views.post_detail_view, name='post_detail'), 
     path('edit_blog_post/<int:post_id>/', edit_blog_post, name='edit_blog_post'),
 
+    # new
+    path('doctors/', views.doctor_list, name='doctor_list'),
+    
+
+
 
 
 ]

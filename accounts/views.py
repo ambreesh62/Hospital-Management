@@ -21,6 +21,13 @@ import json
 from .forms import SignUpForm
 from django.contrib.auth.models import Group
 from django.contrib.auth import logout
+from .utils import create_google_calendar_event
+from datetime import datetime, timedelta
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 
 
 def home_view(request):
@@ -227,28 +234,24 @@ def doctor_dashboard_view(request):
 
 @login_required
 def book_appointment(request, doctor_id):
-    doctor = get_object_or_404(Doctor, id=doctor_id)
+    doctor = get_object_or_404(User, id=doctor_id, user_type='Doctor')
     if request.method == "POST":
-        date = request.POST.get("date")
-        time = request.POST.get("time")
-        status = request.POST.get("status")
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            appointment = form.save(commit=False)
+            appointment.doctor = doctor
+            appointment.patient = request.user
+            appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
+            appointment.save()
 
-        # Ensure the user has a related Patient profile
-        try:
-            patient = Patient.objects.get(user=request.user)
-        except Patient.DoesNotExist:
-            messages.error(request, "Patient profile not found.")
-            return redirect(
-                "error_page"
-            )  # Adjust this to your actual error handling URL
+            # Create Google Calendar event
+            create_google_calendar_event(appointment)
 
-        # Create the appointment
-        Appointment.objects.create(doctor=doctor, patient=patient, date=date, time=time, status=status)
-
-        messages.success(request, "Appointment booked successfully!")
-        return redirect("doctor_dashboard")  # Adjust redirection as needed
-
-    return render(request, "book_appointment.html", {"doctor": doctor})
+            messages.success(request, "Appointment booked successfully!")
+            return redirect('appointment_details', appointment_id=appointment.id)
+    else:
+        form = AppointmentForm()
+    return render(request, "book_appointment.html", {"doctor": doctor, "form": form})
 
 
 def add_doctor(request):
@@ -437,3 +440,13 @@ def edit_blog_post(request, post_id):
     else:
         form = BlogPostForm(instance=post)
     return render(request, 'edit_blog_post.html', {'form': form})
+
+# New
+def doctor_list(request):
+    doctors = CustomUser.objects.filter(user_type='Doctor')
+    return render(request, 'doctor_list.html', {'doctors': doctors})
+
+@login_required
+def appointment_details(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id, patient=request.user)
+    return render(request, 'appointment_details.html', {'appointment': appointment})
