@@ -15,20 +15,18 @@ Doctor Dashboard
     <div class="row mb-4">
         <div class="col-md-12">
             <h3>Your Appointments</h3>
-            <div class="list-group">
-                {% for appointment in appointments %}
-                <div class="list-group-item">
-                    <h5 class="mb-1">Appointment with {{ appointment.patient.first_name }} {{ appointment.patient.last_name }}</h5>
-                    <p class="mb-1">Specialty: {{ appointment.specialty }}</p>
-                    <p class="mb-1">Date: {{ appointment.date }}</p>
-                    <p class="mb-1">Start Time: {{ appointment.start_time }}</p>
-                    <p class="mb-1">End Time: {{ appointment.end_time }}</p>
+            {% if appointments %}
+                <div class="list-group">
+                    {% for appointment in appointments %}
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Appointment with {{ appointment.patient.first_name }} {{ appointment.patient.last_name }}</h5>
+                            <p class="mb-1">Specialty: {{ appointment.specialty }}</p>
+                            <p class="mb-1">Date: {{ appointment.date }}</p>
+                            <p class="mb-1">Start Time: {{ appointment.start_time }}</p>
+                            <p class="mb-1">End Time: {{ appointment.end_time }}</p>
+                        </div>
+                    {% endfor %}
                 </div>
-                {% empty %}
-                <p>No upcoming appointments.</p>
-                {% endfor %}
-                </tbody>
-            </table>
             {% else %}
             <p>No appointments found.</p>
             {% endif %}
