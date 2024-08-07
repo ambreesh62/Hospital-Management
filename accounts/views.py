@@ -225,6 +225,7 @@ def doctor_dashboard_view(request):
         'appointments': appointments,
         'doctors': doctors,
         'user': user,
+        'doctor' : doctor
     }
     
     return render(request, 'doctor_dashboard.html', context)
