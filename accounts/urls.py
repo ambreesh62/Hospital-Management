@@ -59,7 +59,7 @@ urlpatterns = [
     path('doctors/', views.doctor_list, name='doctor_list'),
     path('book_appointment/<int:doctor_id>/', views.book_appointment_view, name='book_appointment'),
 
-    path('appointment-confirmation/<int:appointment_id>/', views.appointment_confirmation, name='appointment_confirmation'),
+    path('appointment-confirmation/<int:appointment_id>/', views.appointment_confirmation_view, name='appointment_confirmation'),
 
     
 
