@@ -210,24 +210,18 @@ def about(request):
 
 @login_required
 def doctor_dashboard_view(request):
-    doctor = get_object_or_404(Doctor, user=request.user)
-    
-    # Fetch appointments for the logged-in doctor
-    appointments = Appointment.objects.filter(doctor=doctor)
-    
-    # Fetch all doctors (or adjust the query as needed)
-    doctors = Doctor.objects.all()
-    user = CustomUser.objects.get(id=request.user.id)
+    user = request.user
+    if user.user_type != 'doctor':
+        # Handle unauthorized access
+        return redirect('some_error_page')
 
-    
-    context = {
-        'appointments': appointments,
-        'doctors': doctors,
-        'user': user,
-    }
-    
-    return render(request, 'doctor_dashboard.html', context)
+    # Fetch the doctor instance
+    doctor = get_object_or_404(CustomUser, id=user.id, user_type='doctor')
 
+    # Fetch other data if needed
+    # ...
+
+    return render(request, 'doctor_dashboard.html', {'doctor': doctor})
 
 @login_required
 def book_appointment(request, doctor_id):
