@@ -167,12 +167,6 @@ def create_appointment(request):
     return render(request, "create_appointment.html", appointment)
 
 
-@login_required
-def view_appointment(request, id):
-    appointment = get_object_from_list(appointments_data, id=id)
-    context = {"appointment": appointment}
-    return render(request, "view_appointment.html", context)
-
 
 @login_required
 def edit_appointment(request, id):
@@ -215,14 +209,12 @@ def about(request):
 def doctor_dashboard_view(request):
     doctor = get_object_or_404(Doctor, user=request.user)
     
-    appointments = Appointment.objects.filter(doctor=doctor)  # Changed from doctor=user to doctor=doctor
 
     # Fetch all doctors (or adjust the query as needed)
     doctors = Doctor.objects.all()
     user = CustomUser.objects.get(id=request.user.id)
 
     context = {
-        'appointments': appointments,
         'doctors': doctors,
         'user': user,
         'doctor' : doctor
@@ -486,3 +478,15 @@ def create_google_calendar_event(appointment):
 
     event = service.events().insert(calendarId='primary', body=event).execute()
     return event
+
+@login_required
+def view_appointment(request, id):
+    # Fetch the appointment by ID
+    appointment = get_object_or_404(Appointment, id=id)
+    
+    # Prepare the context
+    context = {
+        'appointment': appointment
+    }
+    
+    return render(request, 'view_appointment.html', context)

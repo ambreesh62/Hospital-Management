@@ -31,7 +31,6 @@ urlpatterns = [
     path("doctor_dashboard/", doctor_dashboard_view, name="doctor_dashboard"),
     path("patient_dashboard/", patient_dashboard_view, name="patient_dashboard"),
     path("create_appointment/", create_appointment, name="create_appointment"),
-    path("appointment/<int:id>/", view_appointment, name="view_appointment"),
     path("appointment/<int:id>/edit/", edit_appointment, name="edit_appointment"),
     path("appointment/<int:id>/cancel/", cancel_appointment, name="cancel_appointment"),
     path("add_doctor/", add_doctor_view, name="add_doctor"),
