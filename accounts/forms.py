@@ -93,6 +93,14 @@ class AppointmentForm(forms.ModelForm):
     class Meta:
         model = Appointment
         fields = ['date', 'start_time', 'end_time', 'specialty']  
+    start_time = forms.TimeField(
+        widget=forms.TimeInput(format='%H:%M'),
+        input_formats=['%H:%M', '%I:%M%p']
+    )
+    end_time = forms.TimeField(
+        widget=forms.TimeInput(format='%H:%M'),
+        input_formats=['%H:%M', '%I:%M%p']
+    )    
 
 
 class EditDoctorProfileForm(forms.ModelForm):
