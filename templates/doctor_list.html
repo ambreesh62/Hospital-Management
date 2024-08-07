@@ -7,9 +7,10 @@
         {% for doctor in doctors %}
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
-                <img class="card-img-top" src="{{ doctor.profile_picture.url }}" alt="Profile picture">
+                <img src="{{ doctor.profile_picture.url }}" class="card-img-top" alt="{{ doctor.first_name }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ doctor.first_name }} {{ doctor.last_name }}</h5>
+                    <p>Doctor ID: {{ doctor.id }}</p>  <!-- Added doctor ID for reference -->
                     <a href="{% url 'book_appointment' doctor.id %}" class="btn btn-primary">Book Appointment</a>
                 </div>
             </div>

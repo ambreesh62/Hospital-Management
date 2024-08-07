@@ -234,24 +234,23 @@ def doctor_dashboard_view(request):
 
 @login_required
 def book_appointment(request, doctor_id):
-    doctor = get_object_or_404(User, id=doctor_id, user_type='Doctor')
+    doctor = get_object_or_404(CustomUser, id=doctor_id, user_type='Doctor')
     if request.method == "POST":
         form = AppointmentForm(request.POST)
         if form.is_valid():
             appointment = form.save(commit=False)
             appointment.doctor = doctor
             appointment.patient = request.user
-            appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
             appointment.save()
-
+            
             # Create Google Calendar event
             create_google_calendar_event(appointment)
-
+            
             messages.success(request, "Appointment booked successfully!")
-            return redirect('appointment_details', appointment_id=appointment.id)
+            return redirect('appointment_confirmation', appointment_id=appointment.id)
     else:
         form = AppointmentForm()
-    return render(request, "book_appointment.html", {"doctor": doctor, "form": form})
+    return render(request, 'book_appointment.html', {'form': form, 'doctor': doctor})
 
 
 def add_doctor(request):
