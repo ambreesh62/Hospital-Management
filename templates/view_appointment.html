@@ -1,4 +1,3 @@
-<!-- templates/accounts/view_appointment.html -->
 {% extends 'base.html' %}
 
 {% block title %}
@@ -11,15 +10,23 @@ View Appointment
     <table class="table table-bordered">
         <tr>
             <th>Doctor:</th>
-            <td>{{ appointment.doctor_name }}</td>
+            <td>{{ appointment.doctor.username }}</td>  <!-- or doctor_name if you have such a field -->
+        </tr>
+        <tr>
+            <th>Patient:</th>
+            <td>{{ appointment.patient.username }}</td>  <!-- or patient_name if you have such a field -->
         </tr>
         <tr>
             <th>Date:</th>
             <td>{{ appointment.date }}</td>
         </tr>
         <tr>
-            <th>Time:</th>
-            <td>{{ appointment.time }}</td>
+            <th>Start Time:</th>
+            <td>{{ appointment.start_time }}</td>
+        </tr>
+        <tr>
+            <th>End Time:</th>
+            <td>{{ appointment.end_time }}</td>
         </tr>
         <tr>
             <th>Status:</th>
