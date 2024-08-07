@@ -19,7 +19,7 @@ Doctor Dashboard
                 <div class="list-group">
                     {% for appointment in appointments %}
                         <div class="list-group-item">
-                            <h5 class="mb-1">Appointment with {{ appointment.patient.first_name }} {{ appointment.patient.last_name }}</h5>
+                            <h5 class="mb-1">Appointment with {{ appointment.patient.get_full_name }}</h5>
                             <p class="mb-1">Specialty: {{ appointment.specialty }}</p>
                             <p class="mb-1">Date: {{ appointment.date }}</p>
                             <p class="mb-1">Start Time: {{ appointment.start_time }}</p>
