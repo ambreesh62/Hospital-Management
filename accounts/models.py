@@ -63,6 +63,9 @@ class Patient(models.Model):
     medical_history = models.TextField()
     address = models.TextField(default="No address provided")  # Default address
 
+    def __str__(self):
+        return f"Patient {self.user.first_name} {self.user.last_name}"
+
 
 class Appointment(models.Model):
     doctor = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='appointments_as_doctor', on_delete=models.CASCADE)
