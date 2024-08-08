@@ -243,8 +243,11 @@ def book_appointment_view(request, doctor_id):
             # Optionally, add some response logic or messages here
             return redirect('appointment_confirmation', event_id=event['id'])
         else:
-            form = AppointmentForm()
-        return render(request, 'book_appointment.html', {'form': form, 'doctor': doctor})
+            return render(request, 'book_appointment.html', {'form': form, 'doctor': doctor})
+
+    else:
+        form = AppointmentForm()
+    return render(request, 'book_appointment.html', {'form': form, 'doctor': doctor})
 
 
 def add_doctor(request):
