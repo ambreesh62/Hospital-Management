@@ -18,7 +18,6 @@ from .forms import (
 )
 from .models import Doctor, Appointment,CustomUser
 import json
-from django.http import JsonResponse
 from .forms import SignUpForm
 from django.contrib.auth.models import Group
 from django.contrib.auth import logout
@@ -27,7 +26,7 @@ from datetime import datetime, timedelta
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 import google.auth.exceptions
-from django.views.decorators.csrf import csrf_exempt
+from .utils import create_google_calendar_event
 
 
 
@@ -229,34 +228,31 @@ def doctor_dashboard_view(request):
     return render(request, 'doctor_dashboard.html', context)
 
 
-@csrf_exempt
 @login_required
 def book_appointment_view(request, doctor_id):
     doctor = get_object_or_404(CustomUser, id=doctor_id)
-
-    if request.method == 'POST':
-        try:
-            if request.content_type == 'application/json':
-                data = json.loads(request.body)
-            else:
-                data = request.POST
+    if request.method == "POST":
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            appointment = form.save(commit=False)
+            appointment.doctor = doctor
+            appointment.patient = request.user
+            appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
+            appointment.save()
             
-            form = AppointmentForm(data)
-            if form.is_valid():
-                appointment = form.save(commit=False)
-                appointment.doctor = doctor
-                appointment.patient = request.user
-                appointment.save()
-                # Create a Google Calendar event
-                event = create_google_calendar_event(appointment)
-                return JsonResponse({'status': 'success', 'event_id': event['id']})
-            else:
-                return JsonResponse({'status': 'error', 'errors': form.errors}, status=400)
-        except json.JSONDecodeError:
-            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+            try:
+                # Create Google Calendar event
+                create_google_calendar_event(appointment)
+                messages.success(request, "Appointment booked successfully!")
+            except FileNotFoundError:
+                messages.error(request, "Authorization token not found. Please complete the OAuth2 flow.")
+            except google.auth.exceptions.GoogleAuthError as e:
+                messages.error(request, f"Failed to create Google Calendar event: {e}")
+            
+            return redirect('appointment_confirmation', appointment_id=appointment.id)
     else:
         form = AppointmentForm()
-        return render(request, 'book_appointment.html', {'form': form, 'doctor': doctor})
+    return render(request, 'book_appointment.html', {'form': form, 'doctor': doctor})
 
 
 def add_doctor(request):
