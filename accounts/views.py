@@ -95,7 +95,6 @@ def get_object_from_list(data_list, **kwargs):
 
 @login_required
 def patient_dashboard_view(request):
-    # Get the current user
     user = request.user
 
     # Check if the user is a patient
@@ -233,15 +232,6 @@ def logout_view(request):
     logout(request)
     return redirect("home")
 
-
-def patient_dashboard_view(request):
-    user = request.user
-    doctors = Doctor.objects.all()
-    context = {
-        "user": user,
-        "doctors": doctors,
-    }
-    return render(request, "patient_dashboard.html", context)
 
 
 @login_required
