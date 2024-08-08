@@ -19,9 +19,14 @@ Appointment Details
             <p><strong>End Time:</strong> {{ appointment.end_time }}</p>
             <p><strong>Specialty:</strong> {{ appointment.specialty }}</p>
         </div>
-        <div class="card-footer">
-            <a href="{% url 'doctor_dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+        <div class="card-footer d-flex justify-content-between">
+            <a href="{% url 'doctor_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+            <div>
+                <a href="{% url 'accept_appointment' appointment.id %}" class="btn btn-success">Accept</a>
+                <a href="{% url 'cancel_appointment' appointment.id %}" class="btn btn-danger ms-2">Cancel</a>
+            </div>
         </div>
+    </div>
     </div>
     {% else %}
     <p>No appointment available.</p>
