@@ -1,9 +1,8 @@
-<!-- templates/book_appointment.html -->
 {% extends 'base.html' %}
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Book Appointment with Dr. {{ doctor.user.first_name }} {{ doctor.user.last_name }}</h1>
+    <h1 class="text-center mb-4">Book Appointment with Dr. {{ doctor.first_name }} {{ doctor.last_name }}</h1>
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             <div class="card border-primary shadow-lg">
@@ -11,7 +10,7 @@
                     <h3 class="mb-0">Book Appointment</h3>
                 </div>
                 <div class="card-body">
-                    <form method="post" id="appointmentForm">
+                    <form id="appointmentForm">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="specialty">Specialty</label>
@@ -39,7 +38,6 @@
             const cookies = document.cookie.split(';');
             for (let i = 0; i < cookies.length; i++) {
                 const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
                 if (cookie.substring(0, name.length + 1) === (name + '=')) {
                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                     break;
@@ -60,7 +58,7 @@
         const date = formData.get('date');
         const start_time = formData.get('start_time');
 
-        fetch('/book_appointment/{{ doctor.id }}/', {
+        fetch(`/book_appointment/{{ doctor.id }}/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
