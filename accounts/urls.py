@@ -3,7 +3,6 @@ from django.urls import path
 from . import views
 from .views import (
     doctor_dashboard_view,
-    add_doctor_view,
     view_doctor_view,
     edit_doctor_view,
     delete_doctor_view,
@@ -14,8 +13,6 @@ from .views import (
     logout_view,
     update_doctor_profile_view,
     patient_dashboard_view,
-    create_appointment,
-    add_patient,
     error_page,
     about,
     edit_blog_post,
@@ -27,7 +24,6 @@ urlpatterns = [
     path("login/", login_view, name="login"),
     path("doctor_dashboard/", doctor_dashboard_view, name="doctor_dashboard"),
     path("patient_dashboard/", patient_dashboard_view, name="patient_dashboard"),
-    path("create_appointment/", create_appointment, name="create_appointment"),
     path("error/", error_page, name="error_page"),
     path("profile/", profile_view, name="profile"),
     path("profile/<int:doctor_id>/", profile_view, name="profile"),
