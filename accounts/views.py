@@ -18,6 +18,7 @@ from .forms import (
 )
 from .models import Doctor, Appointment,CustomUser
 import json
+from django.http import JsonResponse
 from .forms import SignUpForm
 from django.contrib.auth.models import Group
 from django.contrib.auth import logout
@@ -232,22 +233,24 @@ def book_appointment_view(request, doctor_id):
     doctor = get_object_or_404(CustomUser, id=doctor_id)
 
     if request.method == 'POST':
-        form = AppointmentForm(request.POST)
-        if form.is_valid():
-            appointment = form.save(commit=False)
-            appointment.doctor = doctor
-            appointment.patient = request.user
-            appointment.save()
-            # Create a Google Calendar event
-            event = create_google_calendar_event(appointment)
-            # Optionally, add some response logic or messages here
-            return redirect('appointment_confirmation', event_id=event['id'])
-        else:
-            return render(request, 'book_appointment.html', {'form': form, 'doctor': doctor})
-
+        try:
+            data = json.loads(request.body)
+            form = AppointmentForm(data)
+            if form.is_valid():
+                appointment = form.save(commit=False)
+                appointment.doctor = doctor
+                appointment.patient = request.user
+                appointment.save()
+                # Create a Google Calendar event
+                event = create_google_calendar_event(appointment)
+                return JsonResponse({'status': 'success', 'event_id': event['id']})
+            else:
+                return JsonResponse({'status': 'error', 'errors': form.errors}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
     else:
         form = AppointmentForm()
-    return render(request, 'book_appointment.html', {'form': form, 'doctor': doctor})
+        return render(request, 'book_appointment.html', {'form': form, 'doctor': doctor})
 
 
 def add_doctor(request):
