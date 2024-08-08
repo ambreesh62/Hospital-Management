@@ -143,7 +143,11 @@ def about(request):
 @login_required
 def doctor_dashboard_view(request):
     # Get the doctor profile of the currently logged-in user
-    doctor = get_object_or_404(Doctor, user=request.user)
+    try:    
+       doctor = get_object_or_404(Doctor, user=request.user)
+    except Doctor.DoesNotExist:   
+        return redirect('doctor_dashboard')
+
     
     # Get the logged-in user
     user = request.user
