@@ -114,26 +114,6 @@ def patient_dashboard_view(request):
     return render(request, 'patient_dashboard.html', context)
 
 
-@login_required
-def create_appointment(request):
-    if request.method == "POST":
-        doctor_id = request.POST.get("doctor")
-        date = request.POST.get("date")
-        time = request.POST.get("time")
-
-        doctor = get_object_or_404(User, id=doctor_id)
-        appointment = Appointment.objects.create(
-            doctor=doctor,
-            patient=request.user,  # Assuming the patient is the logged-in user
-            date=date,
-            time=time,
-        )
-
-        messages.success(request, "Appointment created successfully!")
-        return redirect("patient_dashboard")  # Adjust redirection as needed
-
-    return render(request, "create_appointment.html", appointment)
-
 
 
 def about(request):
@@ -206,17 +186,6 @@ def add_doctor(request):
     return render(request, "add_doctor.html", {"form": form})
 
 
-def add_patient(request):
-    if request.method == "POST":
-        form = PatientForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Patient added successfully!")
-            return redirect("patient_dashboard")  # Adjust the redirect as needed
-    else:
-        form = PatientForm()
-    return render(request, "add_patient.html", {"form": form})
-
 
 def error_page(request):
     return render(request, "error.html")
@@ -236,17 +205,6 @@ def logout_view(request):
     return redirect("home")
 
 
-
-@login_required
-def add_doctor_view(request):
-    if request.method == "POST":
-        form = DoctorForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect("doctor_dashboard")
-    else:
-        form = DoctorForm()
-    return render(request, "add_doctor.html", {"form": form})
 
 
 @login_required
