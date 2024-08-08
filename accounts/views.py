@@ -468,15 +468,16 @@ def appointment_confirmation_view(request, appointment_id):
     
     return render(request, 'appointment_confirmation.html', context)
 
+from django.http import HttpResponse
 
 @login_required
 def view_appointment(request, id):
-    # Fetch the appointment by ID
-    appointment = get_object_or_404(Appointment, id=id)
+    try:
+        appointment = Appointment.objects.get(id=id)
+    except Appointment.DoesNotExist:
+        return HttpResponse("Appointment not found.")
     
-    # Prepare the context
     context = {
-        'appointment': appointment
+        'appointment': appointment,
     }
-    
     return render(request, 'view_appointment.html', context)

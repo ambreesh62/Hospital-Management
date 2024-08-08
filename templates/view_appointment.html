@@ -1,39 +1,30 @@
 {% extends 'base.html' %}
 
 {% block title %}
-View Appointment
+Appointment Details
 {% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Appointment Details</h2>
-    <table class="table table-bordered">
-        <tr>
-            <th>Doctor:</th>
-            <td>{{ appointment.doctor.username }}</td>  <!-- or doctor_name if you have such a field -->
-        </tr>
-        <tr>
-            <th>Patient:</th>
-            <td>{{ appointment.patient.username }}</td>  <!-- or patient_name if you have such a field -->
-        </tr>
-        <tr>
-            <th>Date:</th>
-            <td>{{ appointment.date }}</td>
-        </tr>
-        <tr>
-            <th>Start Time:</th>
-            <td>{{ appointment.start_time }}</td>
-        </tr>
-        <tr>
-            <th>End Time:</th>
-            <td>{{ appointment.end_time }}</td>
-        </tr>
-        <tr>
-            <th>Status:</th>
-            <td>{{ appointment.status }}</td>
-        </tr>
-    </table>
-    <a href="{% url 'edit_appointment' appointment.id %}" class="btn btn-warning">Edit</a>
-    <a href="{% url 'cancel_appointment' appointment.id %}" class="btn btn-danger">Cancel</a>
+    <h1>Appointment Details</h1>
+    {% if appointment %}
+    <div class="card">
+        <div class="card-header">
+            <h4>Appointment with Dr. {{ appointment.doctor.user.get_full_name }}</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Patient:</strong> {{ appointment.patient.get_full_name }}</p>
+            <p><strong>Date:</strong> {{ appointment.date }}</p>
+            <p><strong>Start Time:</strong> {{ appointment.start_time }}</p>
+            <p><strong>End Time:</strong> {{ appointment.end_time }}</p>
+            <p><strong>Specialty:</strong> {{ appointment.specialty }}</p>
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'doctor_dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+        </div>
+    </div>
+    {% else %}
+    <p>No appointment available.</p>
+    {% endif %}
 </div>
 {% endblock %}
