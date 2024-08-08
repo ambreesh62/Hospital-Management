@@ -243,7 +243,7 @@ def book_appointment_view(request, doctor_id):
                 specialty=request.POST.get('specialty'),
                 date=request.POST.get('date'),
                 start_time=request.POST.get('start_time'),
-                end_time=request.POST.get('end_time')  # Calculate this if necessary
+                end_time=request.POST.get('end_time')  
             )
             appointment.save()
             return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully!'})
