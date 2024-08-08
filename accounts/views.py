@@ -27,6 +27,7 @@ from datetime import datetime, timedelta
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 import google.auth.exceptions
+from django.views.decorators.csrf import csrf_exempt
 
 
 
@@ -228,6 +229,7 @@ def doctor_dashboard_view(request):
     return render(request, 'doctor_dashboard.html', context)
 
 
+@csrf_exempt
 @login_required
 def book_appointment_view(request, doctor_id):
     doctor = get_object_or_404(CustomUser, id=doctor_id)
