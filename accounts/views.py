@@ -234,16 +234,11 @@ def book_appointment_view(request, doctor_id):
                 appointment = form.save(commit=False)
                 appointment.doctor = doctor
                 appointment.patient = request.user
-                
-                # Calculate end_time
-                start_datetime = datetime.combine(appointment.date, appointment.start_time)
-                end_datetime = start_datetime + timedelta(minutes=45)
-                appointment.end_time = end_datetime.time()
-
+                appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
                 appointment.save()
 
                 # Optionally, handle Google Calendar event creation
-                # create_google_calendar_event(appointment)
+                create_google_calendar_event(appointment)
 
                 return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully!'})
             else:
