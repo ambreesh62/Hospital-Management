@@ -32,7 +32,6 @@ urlpatterns = [
     path("patient_dashboard/", patient_dashboard_view, name="patient_dashboard"),
     path("create_appointment/", create_appointment, name="create_appointment"),
     path("appointment/<int:id>/edit/", edit_appointment, name="edit_appointment"),
-    path("appointment/<int:id>/cancel/", cancel_appointment, name="cancel_appointment"),
     path("add_doctor/", add_doctor_view, name="add_doctor"),
     path("add_patient/", add_patient, name="add_patient"),
     path("error/", error_page, name="error_page"),
@@ -61,6 +60,10 @@ urlpatterns = [
     path('appointment-confirmation/<int:appointment_id>/', views.appointment_confirmation_view, name='appointment_confirmation'),
     path('doctor_dashboard/<int:doctor_id>/', doctor_dashboard_view, name='doctor_dashboard'),
     path('appointment/<int:id>/', views.view_appointment, name='view_appointment'),
+    path('appointment/<int:appointment_id>/accept/', views.accept_appointment, name='accept_appointment'),
+    path("appointment/<int:id>/cancel/", cancel_appointment, name="cancel_appointment"),
+
+
 
 
 

@@ -191,16 +191,6 @@ def edit_appointment(request, id):
     return render(request, "edit_appointment.html", context)
 
 
-@login_required
-def cancel_appointment(request, id):
-    appointment = get_object_from_list(appointments_data, id=id)
-    appointments_data.remove(appointment)
-
-    # Display a success message
-    messages.success(request, "Appointment canceled successfully!")
-
-    return redirect("patient_dashboard")  # Redirect to the patient dashboard
-
 
 def about(request):
     return render(request, "about.html")
@@ -481,3 +471,19 @@ def view_appointment(request, id):
         'appointment': appointment,
     }
     return render(request, 'view_appointment.html', context)
+
+@login_required
+def accept_appointment(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id)
+    # Implement the logic to accept the appointment
+    appointment.status = 'Accepted'  # Assuming there's a status field
+    appointment.save()
+    return redirect('doctor_dashboard')
+
+@login_required
+def cancel_appointment(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id)
+    # Implement the logic to cancel the appointment
+    appointment.status = 'Canceled'  # Assuming there's a status field
+    appointment.save()
+    return redirect('doctor_dashboard')
