@@ -191,13 +191,19 @@ def error_page(request):
     return render(request, "error.html")
 
 
-@login_required
 def profile_view(request):
-    doctor = get_object_or_404(Doctor, user=request.user)
-    context = {
-        "doctor": doctor,
-    }
-    return render(request, "doctor_profile.html", context)
+    if request.user.is_authenticated:
+        if hasattr(request.user, 'doctor'):
+            profile = get_object_or_404(Doctor, user=request.user)
+            template_name = 'doctor_profile.html'
+        elif hasattr(request.user, 'patient'):
+            profile = get_object_or_404(Patient, user=request.user)
+            template_name = 'patient_profile.html'
+        else:
+            return render(request, 'error.html', {'message': 'Profile not found'})
+        return render(request, template_name, {'profile': profile})
+    else:
+        return redirect('login')
 
 
 def logout_view(request):
