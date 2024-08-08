@@ -1,104 +1,98 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Appointment</title>
-    <script>
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
+{% extends 'base.html' %}
 
-        function calculateEndTime(startTime) {
-            const [hours, minutes] = startTime.split(':').map(Number);
-            const startDate = new Date();
-            startDate.setHours(hours, minutes);
-            const endDate = new Date(startDate.getTime() + 45 * 60000);
-            const endHours = endDate.getHours().toString().padStart(2, '0');
-            const endMinutes = endDate.getMinutes().toString().padStart(2, '0');
-            return `${endHours}:${endMinutes}`;
-        }
-
-        function bookAppointment(event) {
-            event.preventDefault();
-            const csrftoken = getCookie('csrftoken');
-            const form = document.getElementById('appointmentForm');
-            const formData = new FormData(form);
-            const specialty = formData.get('specialty');
-            const date = formData.get('date');
-            const start_time = formData.get('start_time');
-            const end_time = calculateEndTime(start_time);
-
-            fetch(`/book_appointment/{{ doctor.id }}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken,
-                },
-                body: JSON.stringify({
-                    specialty: specialty,
-                    date: date,
-                    start_time: start_time,
-                    end_time: end_time
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    alert('Appointment booked successfully!');
-                } else {
-                    alert('Error: ' + data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('appointmentForm').addEventListener('submit', bookAppointment);
-        });
-    </script>
-</head>
-<body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Book Appointment with Dr. {{ doctor.first_name }} {{ doctor.last_name }}</h1>
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                <div class="card border-primary shadow-lg">
-                    <div class="card-header bg-primary text-white text-center">
-                        <h3 class="mb-0">Book Appointment</h3>
-                    </div>
-                    <div class="card-body">
-                        <form id="appointmentForm">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="specialty">Specialty</label>
-                                {{ form.specialty }}
-                            </div>
-                            <div class="form-group">
-                                <label for="date">Date of Appointment</label>
-                                {{ form.date }}
-                            </div>
-                            <div class="form-group">
-                                <label for="start_time">Start Time of Appointment</label>
-                                {{ form.start_time }}
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-block rounded-pill">Confirm Appointment</button>
-                        </form>
-                    </div>
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Book Appointment with Dr. {{ doctor.first_name }} {{ doctor.last_name }}</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-primary shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="mb-0">Book Appointment</h3>
+                </div>
+                <div class="card-body">
+                    <form id="appointmentForm">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="specialty">Specialty</label>
+                            {{ form.specialty }}
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date of Appointment</label>
+                            {{ form.date }}
+                        </div>
+                        <div class="form-group">
+                            <label for="start_time">Start Time of Appointment</label>
+                            {{ form.start_time }}
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block rounded-pill">Confirm Appointment</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function calculateEndTime(startTime) {
+        const [hours, minutes] = startTime.split(':').map(Number);
+        const startDate = new Date();
+        startDate.setHours(hours, minutes);
+        const endDate = new Date(startDate.getTime() + 45 * 60000);
+        const endHours = endDate.getHours().toString().padStart(2, '0');
+        const endMinutes = endDate.getMinutes().toString().padStart(2, '0');
+        return `${endHours}:${endMinutes}`;
+    }
+
+    function bookAppointment(event) {
+        event.preventDefault();
+        const csrftoken = getCookie('csrftoken');
+        const form = document.getElementById('appointmentForm');
+        const formData = new FormData(form);
+        const specialty = formData.get('specialty');
+        const date = formData.get('date');
+        const start_time = formData.get('start_time');
+        const end_time = calculateEndTime(start_time);
+
+        fetch(`/book_appointment/{{ doctor.id }}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({
+                specialty: specialty,
+                date: date,
+                start_time: start_time,
+                end_time: end_time
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('Appointment booked successfully!');
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('appointmentForm').addEventListener('submit', bookAppointment);
+    });
+</script>
+{% endblock %}
