@@ -215,7 +215,6 @@ def doctor_dashboard_view(request):
     # Fetch all doctors (or adjust the query as needed)
     doctors = Doctor.objects.all()
     user = CustomUser.objects.get(id=request.user.id)
-    user = request.user
 
 
     context = {
