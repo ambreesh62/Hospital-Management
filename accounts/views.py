@@ -98,6 +98,11 @@ def patient_dashboard_view(request):
     # Get the current user
     user = request.user
 
+    # Check if the user is a patient
+    if user.user_type != 'patient':
+        # Redirect to the appropriate dashboard (e.g., doctor_dashboard)
+        return redirect('doctor_dashboard')  # or any other appropriate page
+
     # Retrieve all doctors to display on the dashboard
     doctors = Doctor.objects.all()
 

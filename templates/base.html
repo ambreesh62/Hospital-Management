@@ -499,9 +499,6 @@ textarea {
         <p>
             <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
         </p>
-        {% if user.is_staff %} <!-- Only show Admin Login button if user is staff -->
-            <a class="btn btn-secondary mt-2" href="{% url 'admin:login' %}">Admin Login</a>
-        {% endif %}
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
