@@ -215,7 +215,7 @@ def doctor_dashboard_view(request):
     user = request.user
 
     # Fetch appointments related to the logged-in doctor
-    appointments = Appointment.objects.filter(doctor=user)
+    appointments = Appointment.objects.filter(doctor=doctor)
 
     # Fetch all doctors (if needed; adjust query as required)
     doctors = Doctor.objects.all()
