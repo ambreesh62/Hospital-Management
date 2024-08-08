@@ -383,8 +383,3 @@ def cancel_appointment(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id)
     appointment.delete()  # This will delete the appointment
     return redirect('doctor_dashboard')
-
-
-def patient_profile(request):
-    patient = get_object_or_404(Patient, user=request.user)
-    return render(request, 'patient_profile.html', {'patient': patient})
