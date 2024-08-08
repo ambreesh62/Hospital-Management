@@ -240,7 +240,7 @@ def book_appointment_view(request, doctor_id):
             if form.is_valid():
                 appointment = form.save(commit=False)
                 appointment.doctor = doctor
-                appointment.patient = patient  # Assigning Patient instance
+                appointment.patient = patient
                 appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
                 appointment.save()
 
@@ -256,6 +256,7 @@ def book_appointment_view(request, doctor_id):
         form = AppointmentForm()
     
     return render(request, 'book_appointment.html', {'form': form, 'doctor': doctor})
+
 
 
 def add_doctor(request):
