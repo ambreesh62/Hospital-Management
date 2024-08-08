@@ -10,13 +10,19 @@ Doctor Dashboard
     <h3>Welcome, Dr. {{ user.first_name }} {{ user.last_name }}!</h3>
     <a href="{% url 'add_doctor' %}" class="btn btn-primary">Add Doctor</a>
 
-    <div class="mb-3">
-    {% if appointment %}
-    <a href="{% url 'view_appointment' appointment.id %}" class="btn btn-info btn-sm">View Appointment</a>
-    {% else %}
-    <p>No appointment available.</p>
-    {% endif %}
+    <!-- Appointments Section -->
+    <h3>My Appointments</h3>
+    {% if appointments %}
+    <div class="list-group">
+        {% for appointment in appointments %}
+        <a href="{% url 'view_appointment' appointment.id %}" class="list-group-item list-group-item-action">
+            View Appointment for {{ appointment.date }} at {{ appointment.start_time }}
+        </a>
+        {% endfor %}
     </div>
+    {% else %}
+    <p>No appointments available.</p>
+    {% endif %}
 
 
 
