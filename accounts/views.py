@@ -26,6 +26,7 @@ from datetime import datetime, timedelta
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 import google.auth.exceptions
+from .utils import get_credentials
 
 
 
@@ -464,12 +465,14 @@ def appointment_confirmation_view(request, appointment_id):
 
 
 def create_google_calendar_event(appointment):
-    creds = Credentials.from_authorized_user_file('token.json', ['https://www.googleapis.com/auth/calendar'])
-    service = build('calendar', 'v3', credentials=creds)
-    
+    # Get the credentials
+    credentials = get_credentials()
+
+    service = build('calendar', 'v3', credentials=credentials)
+
+    # Create an event body
     event = {
-        'summary': f'Appointment with Dr. {appointment.doctor.get_full_name()}',
-        'description': f'Specialty: {appointment.specialty}',
+        'summary': f'Appointment with Dr. {appointment.doctor.first_name} {appointment.doctor.last_name}',
         'start': {
             'dateTime': f'{appointment.date}T{appointment.start_time}',
             'timeZone': 'UTC',
@@ -478,8 +481,13 @@ def create_google_calendar_event(appointment):
             'dateTime': f'{appointment.date}T{appointment.end_time}',
             'timeZone': 'UTC',
         },
+        'attendees': [
+            {'email': appointment.doctor.email},
+            {'email': appointment.patient.email},
+        ],
     }
 
+    # Insert the event into the calendar
     event = service.events().insert(calendarId='primary', body=event).execute()
     return event
 
