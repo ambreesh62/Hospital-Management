@@ -208,15 +208,23 @@ def about(request):
 
 @login_required
 def doctor_dashboard_view(request):
-    user = request.user
-    appointments = Appointment.objects.filter(doctor=user)
-    doctors = CustomUser.objects.filter(user_type='doctor')
+    doctor = get_object_or_404(Doctor, user=request.user)
     
+    appointments = Appointment.objects.filter(doctor=user)
+
+    # Fetch all doctors (or adjust the query as needed)
+    doctors = Doctor.objects.all()
+    user = CustomUser.objects.get(id=request.user.id)
+    user = request.user
+
+
     context = {
-        'user': user,
         'appointments': appointments,
-        'doctors': doctors
+        'doctors': doctors,
+        'user': user,
+        'doctor' : doctor
     }
+    
     return render(request, 'doctor_dashboard.html', context)
 
 from django.http import JsonResponse

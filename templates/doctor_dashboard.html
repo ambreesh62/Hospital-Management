@@ -9,13 +9,8 @@ Doctor Dashboard
     <h1>Doctor Dashboard</h1>
     <h3>Welcome, Dr. {{ user.first_name }} {{ user.last_name }}!</h3>
     <a href="{% url 'add_doctor' %}" class="btn btn-primary">Add Doctor</a>
-    {% for appointment in appointments %}
-    {% if appointment.id %}
-        <a href="{% url 'view_appointment' appointment.id %}">View Appointment</a>
-    {% else %}
-        <p>Invalid appointment ID</p>
-    {% endif %}
-    {% endfor %}
+    <a href="{% url 'view_appointment' appointment.id %}" class="btn btn-info btn-sm">View Appointment</a>
+
 
     <!-- Doctors List Section -->
     <div class="card mt-4">
