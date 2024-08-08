@@ -228,30 +228,49 @@ def doctor_dashboard_view(request):
     return render(request, 'doctor_dashboard.html', context)
 
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import google.auth.exceptions
+
+
 @login_required
 def book_appointment_view(request, doctor_id):
     doctor = get_object_or_404(CustomUser, id=doctor_id)
+
     if request.method == "POST":
-        form = AppointmentForm(request.POST)
-        if form.is_valid():
-            appointment = form.save(commit=False)
-            appointment.doctor = doctor
-            appointment.patient = request.user
-            appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
-            appointment.save()
-            
-            try:
-                # Create Google Calendar event
-                create_google_calendar_event(appointment)
-                messages.success(request, "Appointment booked successfully!")
-            except FileNotFoundError:
-                messages.error(request, "Authorization token not found. Please complete the OAuth2 flow.")
-            except google.auth.exceptions.GoogleAuthError as e:
-                messages.error(request, f"Failed to create Google Calendar event: {e}")
-            
-            return redirect('appointment_confirmation', appointment_id=appointment.id)
+        try:
+            data = json.loads(request.body)
+            # Extract data from JSON payload
+            form_data = {
+                'date': data.get('date'),
+                'start_time': data.get('start_time'),
+                # Include other necessary form fields
+            }
+            form = AppointmentForm(form_data)
+
+            if form.is_valid():
+                appointment = form.save(commit=False)
+                appointment.doctor = doctor
+                appointment.patient = request.user
+                appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
+                appointment.save()
+                
+                try:
+                    # Create Google Calendar event
+                    create_google_calendar_event(appointment)
+                    return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully!'})
+                except FileNotFoundError:
+                    return JsonResponse({'status': 'error', 'message': 'Authorization token not found. Please complete the OAuth2 flow.'})
+                except google.auth.exceptions.GoogleAuthError as e:
+                    return JsonResponse({'status': 'error', 'message': f'Failed to create Google Calendar event: {e}'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Invalid form data'}, status=400)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
     else:
         form = AppointmentForm()
+    
     return render(request, 'book_appointment.html', {'form': form, 'doctor': doctor})
 
 
