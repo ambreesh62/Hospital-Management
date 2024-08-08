@@ -171,7 +171,7 @@ from django.http import JsonResponse
 
 @login_required
 def book_appointment_view(request, doctor_id):
-    doctor = get_object_or_404(Doctor, id=doctor_id)
+    doctor = get_object_or_404(Doctor, id=doctor_id)  # Ensure this returns a Doctor instance
     
     if request.method == "POST":
         try:
@@ -179,21 +179,15 @@ def book_appointment_view(request, doctor_id):
             form = AppointmentForm(data)
             if form.is_valid():
                 appointment = form.save(commit=False)
-                appointment.doctor = doctor
+                appointment.doctor = doctor  # This should be a Doctor instance
                 appointment.patient = request.user
                 appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
                 appointment.save()
 
-                # Add a success message
-                messages.success(request, 'Appointment booked successfully!')
-
-                # Redirect to confirmation page after successful booking
-                return redirect('appointment_confirmation', appointment_id=appointment.id)
+                return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully!'})
             else:
-                messages.error(request, 'Invalid form data')
                 return JsonResponse({'status': 'error', 'message': 'Invalid form data'})
         except json.JSONDecodeError:
-            messages.error(request, 'Invalid JSON data')
             return JsonResponse({'status': 'error', 'message': 'Invalid JSON'})
     else:
         form = AppointmentForm()
