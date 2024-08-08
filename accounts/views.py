@@ -227,31 +227,34 @@ def doctor_dashboard_view(request):
     
     return render(request, 'doctor_dashboard.html', context)
 
+from django.http import JsonResponse
 
 @login_required
 def book_appointment_view(request, doctor_id):
     doctor = get_object_or_404(CustomUser, id=doctor_id)
+    
     if request.method == "POST":
-        form = AppointmentForm(request.POST)
-        if form.is_valid():
-            appointment = form.save(commit=False)
-            appointment.doctor = doctor
-            appointment.patient = request.user
-            appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
-            appointment.save()
-            
-            try:
-                # Create Google Calendar event
-                create_google_calendar_event(appointment)
-                messages.success(request, "Appointment booked successfully!")
-            except FileNotFoundError:
-                messages.error(request, "Authorization token not found. Please complete the OAuth2 flow.")
-            except google.auth.exceptions.GoogleAuthError as e:
-                messages.error(request, f"Failed to create Google Calendar event: {e}")
-            
-            return redirect('appointment_confirmation', appointment_id=appointment.id)
+        try:
+            data = json.loads(request.body)
+            form = AppointmentForm(data)
+            if form.is_valid():
+                appointment = form.save(commit=False)
+                appointment.doctor = doctor
+                appointment.patient = request.user
+                appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
+                appointment.save()
+
+                # Optionally, handle Google Calendar event creation
+                # create_google_calendar_event(appointment)
+
+                return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully!'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Invalid form data'})
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'})
     else:
         form = AppointmentForm()
+    
     return render(request, 'book_appointment.html', {'form': form, 'doctor': doctor})
 
 
