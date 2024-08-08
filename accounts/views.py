@@ -224,36 +224,31 @@ from django.http import JsonResponse
 
 @login_required
 def book_appointment_view(request, doctor_id):
-    if request.method == 'POST':
-        doctor = get_object_or_404(Doctor, id=doctor_id)
-        if not hasattr(request.user, 'patient'):
-            return JsonResponse({'status': 'error', 'message': 'You must be a patient to book an appointment.'}, status=400)
-
-        patient = request.user.patient
+    doctor = get_object_or_404(Doctor, id=doctor_id)
+    
+    if request.method == "POST":
         try:
             data = json.loads(request.body)
-            specialty = data.get('specialty')
-            date = data.get('date')
-            start_time = data.get('start_time')
-            end_time = data.get('end_time')
+            form = AppointmentForm(data)
+            if form.is_valid():
+                appointment = form.save(commit=False)
+                appointment.doctor = doctor
+                appointment.patient = request.user
+                appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
+                appointment.save()
 
-            # Create appointment
-            appointment = Appointment(
-                doctor=doctor,
-                patient=patient,
-                specialty=specialty,
-                date=date,
-                start_time=start_time,
-                end_time=end_time
-            )
-            appointment.save()
+                # Optionally, handle Google Calendar event creation
+                # create_google_calendar_event(appointment)
 
-            return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully!'})
-        except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+                return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully!'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Invalid form data'})
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'})
+    else:
+        form = AppointmentForm()
     
-    # Return a response for non-POST requests
-    return JsonResponse({'status': 'error', 'message': 'Method Not Allowed'}, status=405)
+    return render(request, 'book_appointment.html', {'form': form, 'doctor': doctor})
 
 
 
