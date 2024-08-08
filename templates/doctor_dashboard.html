@@ -8,8 +8,11 @@ Doctor Dashboard
 <div class="container mt-4">
     <h1>Doctor Dashboard</h1>
     <h3>Welcome, Dr. {{ user.first_name }} {{ user.last_name }}!</h3>
+    <div class="mb-3">
     <a href="{% url 'add_doctor' %}" class="btn btn-primary">Add Doctor</a>
     <a href="{% url 'view_appointment' appointment.id %}" class="btn btn-info btn-sm">View Appointment</a>
+    </div>
+
 
 
     <!-- Doctors List Section -->
