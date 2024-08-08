@@ -224,8 +224,15 @@ from django.http import JsonResponse
 
 @login_required
 def book_appointment_view(request, doctor_id):
-    doctor = get_object_or_404(Doctor, id=doctor_id)
+    # Fetch the Doctor instance
+    doctor = get_object_or_404(Doctor, user_id=doctor_id)
     
+    # Fetch the Patient instance for the logged-in user
+    try:
+        patient = Patient.objects.get(user=request.user)
+    except Patient.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Patient profile not found'})
+
     if request.method == "POST":
         try:
             data = json.loads(request.body)
@@ -233,7 +240,7 @@ def book_appointment_view(request, doctor_id):
             if form.is_valid():
                 appointment = form.save(commit=False)
                 appointment.doctor = doctor
-                appointment.patient = request.user
+                appointment.patient = patient  # Assigning Patient instance
                 appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
                 appointment.save()
 
