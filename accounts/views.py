@@ -208,23 +208,15 @@ def about(request):
 
 @login_required
 def doctor_dashboard_view(request):
-    doctor = get_object_or_404(Doctor, user=request.user)
-    
-    appointments = Appointment.objects.filter(doctor=request.user)
-
-    # Fetch all doctors (or adjust the query as needed)
-    doctors = Doctor.objects.all()
-    user = CustomUser.objects.get(id=request.user.id)
     user = request.user
-
-
-    context = {
-        'appointments': appointments,
-        'doctors': doctors,
-        'user': user,
-        'doctor' : doctor
-    }
+    appointments = Appointment.objects.filter(doctor=user)
+    doctors = CustomUser.objects.filter(user_type='doctor')
     
+    context = {
+        'user': user,
+        'appointments': appointments,
+        'doctors': doctors
+    }
     return render(request, 'doctor_dashboard.html', context)
 
 from django.http import JsonResponse
@@ -245,7 +237,7 @@ def book_appointment_view(request, doctor_id):
                 appointment.save()
 
                 # Optionally, handle Google Calendar event creation
-                create_google_calendar_event(appointment)
+                # create_google_calendar_event(appointment)
 
                 return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully!'})
             else:
