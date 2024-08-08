@@ -225,32 +225,26 @@ from django.http import JsonResponse
 @login_required
 def book_appointment_view(request, doctor_id):
     if request.method == 'POST':
-        # Fetch the doctor instance
         doctor = get_object_or_404(Doctor, id=doctor_id)
-
-        # Check if the user is a Patient
         if not hasattr(request.user, 'patient'):
             return JsonResponse({'status': 'error', 'message': 'You must be a patient to book an appointment.'}, status=400)
 
-        # Retrieve the patient instance
         patient = request.user.patient
-
-        # Create the appointment
         try:
-            appointment = Appointment(
-                doctor=doctor,
-                patient=patient,
-                specialty=request.POST.get('specialty'),
-                date=request.POST.get('date'),
-                start_time=request.POST.get('start_time'),
-                end_time=request.POST.get('end_time')  
-            )
-            appointment.save()
-            return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully!'})
+            form = AppointmentForm(request.POST)
+            if form.is_valid():
+                appointment = form.save(commit=False)
+                appointment.doctor = doctor
+                appointment.patient = patient
+                appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
+                appointment.save()
+                return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully!'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Invalid form data'}, status=400)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
     else:
-        return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+        return JsonResponse({'status': 'error', 'message': 'Method Not Allowed'}, status=405)
 
 
 
