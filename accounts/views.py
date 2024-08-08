@@ -84,27 +84,6 @@ def login_view(request):
     return render(request, "login.html", {"form": form})
 
 
-# Dummy data to simulate database records
-appointments_data = [
-    {
-        "id": 1,
-        "doctor_name": "Dr. Smith",
-        "date": "2024-07-30",
-        "time": "10:00",
-        "status": "Confirmed",
-    },
-    # Add more appointments if needed
-]
-
-medical_history_data = [
-    {
-        "date": "2024-01-15",
-        "doctor_name": "Dr. John",
-        "diagnosis": "Flu",
-        "prescription": "Rest, Fluids",
-    },
-    # Add more medical history records if needed
-]
 
 
 def get_object_from_list(data_list, **kwargs):
@@ -150,29 +129,6 @@ def create_appointment(request):
         return redirect("patient_dashboard")  # Adjust redirection as needed
 
     return render(request, "create_appointment.html", appointment)
-
-
-
-@login_required
-def edit_appointment(request, id):
-    appointment = get_object_from_list(appointments_data, id=id)
-    if request.method == "POST":
-        doctor = request.POST.get("doctor")
-        date = request.POST.get("date")
-        time = request.POST.get("time")
-
-        # Update the appointment data
-        appointment["doctor_name"] = doctor
-        appointment["date"] = date
-        appointment["time"] = time
-
-        # Display a success message
-        messages.success(request, "Appointment updated successfully!")
-
-        return redirect("patient_dashboard")  # Redirect to the patient dashboard
-
-    context = {"appointment": appointment}
-    return render(request, "edit_appointment.html", context)
 
 
 
