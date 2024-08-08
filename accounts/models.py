@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 from datetime import datetime, timedelta
+from django.core.exceptions import ValidationError
 
 
 class CustomUser(AbstractUser):
@@ -77,9 +78,19 @@ class Appointment(models.Model):
     status = models.CharField(max_length=20, default='Scheduled')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def clean(self):
+        # Ensure end_time is after start_time
+        if self.end_time and self.start_time and self.end_time <= self.start_time:
+            raise ValidationError("End time must be after start time.")
+
     def save(self, *args, **kwargs):
+        # Auto set end_time if not provided
         if not self.end_time:
             self.end_time = (datetime.combine(self.date, self.start_time) + timedelta(minutes=45)).time()
+        
+        # Run validation before saving
+        self.clean()
+
         super().save(*args, **kwargs)
 
 # New
