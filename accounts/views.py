@@ -232,33 +232,35 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import google.auth.exceptions
 
-@csrf_exempt
+
 @login_required
+@csrf_exempt
 def book_appointment_view(request, doctor_id):
     if request.method == "POST":
         try:
-            data = json.loads(request.body)  # Load JSON data from request
+            data = json.loads(request.body.decode('utf-8'))
             specialty = data.get('specialty')
-            date = data.get('date')
-            start_time = data.get('start_time')
+            date_str = data.get('date')
+            start_time_str = data.get('start_time')
             
-            
-            # Validate and process the data
-            if not date or not start_time or not specialty:
+            if not specialty or not date_str or not start_time_str:
                 return JsonResponse({"status": "error", "message": "Missing data"}, status=400)
+            
+            # Parse date and time
+            date = datetime.strptime(date_str, '%Y-%m-%d').date()
+            start_time = datetime.strptime(start_time_str, '%H:%M:%S').time()
             
             doctor = get_object_or_404(CustomUser, id=doctor_id)
             appointment = Appointment(
                 doctor=doctor,
                 patient=request.user,
+                specialty=specialty,
                 date=date,
                 start_time=start_time,
-                specialty=specialty,
                 end_time=(datetime.combine(date, start_time) + timedelta(minutes=45)).time()
             )
             appointment.save()
             
-            # Handle Google Calendar event creation here
             try:
                 create_google_calendar_event(appointment)
                 return JsonResponse({"status": "success", "message": "Appointment booked successfully!"})
