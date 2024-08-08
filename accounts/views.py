@@ -116,35 +116,19 @@ def get_object_from_list(data_list, **kwargs):
 
 @login_required
 def patient_dashboard_view(request):
+    # Get the current user
     user = request.user
-    appointments = [
-        {
-            "id": 1,
-            "doctor_name": "Dr. Smith",
-            "date": "2024-07-30",
-            "time": "10:00",
-            "status": "Confirmed",
-        },
-        # Add more appointments if needed
-    ]
-    medical_history = [
-        {
-            "date": "2024-01-15",
-            "doctor_name": "Dr. John",
-            "diagnosis": "Flu",
-            "prescription": "Rest, Fluids",
-        },
-        # Add more medical history records if needed
-    ]
-    doctors = Doctor.objects.all()  # Fetch all doctors
 
+    # Retrieve all doctors to display on the dashboard
+    doctors = Doctor.objects.all()
+
+    # Pass data to the template
     context = {
-        "user": user,
-        "appointments": appointments,
-        "medical_history": medical_history,
-        "doctors": doctors,  # Add available doctors to context
+        'user': user,
+        'doctors': doctors,
     }
-    return render(request, "patient_dashboard.html", context)
+
+    return render(request, 'patient_dashboard.html', context)
 
 
 @login_required
