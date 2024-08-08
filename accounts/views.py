@@ -234,7 +234,11 @@ def book_appointment_view(request, doctor_id):
 
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)
+            if request.content_type == 'application/json':
+                data = json.loads(request.body)
+            else:
+                data = request.POST
+            
             form = AppointmentForm(data)
             if form.is_valid():
                 appointment = form.save(commit=False)
