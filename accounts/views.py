@@ -224,7 +224,9 @@ from django.http import JsonResponse
 
 @login_required
 def book_appointment_view(request, doctor_id):
-    doctor = get_object_or_404(CustomUser, id=doctor_id)
+    # Fetch the Doctor instance using CustomUser
+    custom_user = get_object_or_404(CustomUser, id=doctor_id)
+    doctor = get_object_or_404(Doctor, user=custom_user)
     
     if request.method == "POST":
         try:
@@ -232,7 +234,7 @@ def book_appointment_view(request, doctor_id):
             form = AppointmentForm(data)
             if form.is_valid():
                 appointment = form.save(commit=False)
-                appointment.doctor = doctor
+                appointment.doctor = doctor  # Assign the Doctor instance
                 appointment.patient = request.user
                 appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
                 appointment.save()
