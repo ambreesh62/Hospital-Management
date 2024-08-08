@@ -230,29 +230,17 @@ def doctor_dashboard_view(request):
 
 @login_required
 def book_appointment_view(request, doctor_id):
-    doctor = get_object_or_404(CustomUser, id=doctor_id)
-    if request.method == "POST":
+     if request.method == 'POST':
         form = AppointmentForm(request.POST)
         if form.is_valid():
-            appointment = form.save(commit=False)
-            appointment.doctor = doctor
-            appointment.patient = request.user
-            appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
-            appointment.save()
-            
-            try:
-                # Create Google Calendar event
-                create_google_calendar_event(appointment)
-                messages.success(request, "Appointment booked successfully!")
-            except FileNotFoundError:
-                messages.error(request, "Authorization token not found. Please complete the OAuth2 flow.")
-            except google.auth.exceptions.GoogleAuthError as e:
-                messages.error(request, f"Failed to create Google Calendar event: {e}")
-            
-            return redirect('appointment_confirmation', appointment_id=appointment.id)
-    else:
-        form = AppointmentForm()
-    return render(request, 'book_appointment.html', {'form': form, 'doctor': doctor})
+            appointment = form.save()
+            # Create a Google Calendar event
+            event = create_google_calendar_event(appointment)
+            # Optionally, add some response logic or messages here
+            return redirect('appointment_confirmation', event_id=event['id'])
+        else:
+            form = AppointmentForm()
+        return render(request, 'book_appointment.html', {'form': form})
 
 
 def add_doctor(request):
