@@ -6,36 +6,39 @@ Doctor Dashboard
 
 {% block content %}
 <div class="container mt-4">
-    <!-- Dashboard Header -->
-    <div class="dashboard-header">
-        <h1>Doctor Dashboard</h1>
-        <h3>Welcome, Dr. {{ user.first_name }} {{ user.last_name }}!</h3>
-    </div>
+    <!-- Dashboard Heading -->
+    <h1>Doctor Dashboard</h1>
+    <h3>Welcome, Dr. {{ user.first_name }} {{ user.last_name }}!</h3>
 
     <!-- Add Doctor Button -->
-    <a href="{% url 'add_doctor' %}" class="btn btn-custom mt-3 mb-4">Add Doctor</a>
-
-    <!-- Card for Appointments Section -->
-    <div class="card card-custom mt-4">
-        <div class="card-header card-header-custom">
-            My Appointments
+    <div class="card mt-4">
+        <div class="card-header"> 
+            <a href="{% url 'add_doctor' %}" class="btn btn-primary mb-3">Add Doctor</a>
         </div>
-        <div class="card-body card-body-custom">
-            {% if appointments %}
-            <div class="list-group">
-                {% for appointment in appointments %}
-                <a href="{% url 'view_appointment' appointment.id %}" class="list-group-item list-group-item-action list-group-item-custom">
-                    View Appointment for {{ appointment.date }} at {{ appointment.start_time }}
-                </a>
-                {% endfor %}
+    </div>            
+
+    <div class="container mt-4">
+        <!-- Card for Appointments Section -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <!-- Card header content -->
+                <h3>My Appointments</h3>
             </div>
-            {% else %}
-            <p>No appointments available.</p>
-            {% endif %}
+            <div class="card-body">
+                {% if appointments %}
+                <div class="list-group">
+                    {% for appointment in appointments %}
+                    <a href="{% url 'view_appointment' appointment.id %}" class="list-group-item list-group-item-action">
+                        View Appointment for {{ appointment.date }} at {{ appointment.start_time }}
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p>No appointments available.</p>
+                {% endif %}
+            </div>
         </div>
     </div>
-    </div>
-
 
 
 
@@ -82,39 +85,3 @@ Doctor Dashboard
     </div>
 </div>
 {% endblock %}
-<style>
-    .dashboard-header {
-        background: linear-gradient(45deg, #007bff, #00d2ff);
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-    }
-    .btn-custom {
-        background-color: #ff5722;
-        color: white;
-        border-radius: 20px;
-        padding: 10px 20px;
-    }
-    .btn-custom:hover {
-        background-color: #e64a19;
-        color: white;
-    }
-    .card-custom {
-        border: 1px solid #007bff;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .card-header-custom {
-        background-color: #007bff;
-        color: white;
-        font-size: 1.25rem;
-        border-radius: 10px 10px 0 0;
-    }
-    .card-body-custom {
-        padding: 20px;
-    }
-    .list-group-item-custom {
-        border-radius: 10px;
-        margin-bottom: 10px;
-    }
-</style>
