@@ -13,11 +13,11 @@ Appointment Details
             <h4>Appointment with Dr. {{ appointment.doctor.user.get_full_name }}</h4>
         </div>
         <div class="card-body">
-            <p><strong>Patient:</strong> {{ appointment.patient.get_full_name }}</p>
+            <p><strong>Patient:</strong> {{ appointment.patient.user.get_full_name }}</p>
+            <p><strong>Specialty:</strong> {{ appointment.specialty }}</p>
             <p><strong>Date:</strong> {{ appointment.date }}</p>
             <p><strong>Start Time:</strong> {{ appointment.start_time }}</p>
             <p><strong>End Time:</strong> {{ appointment.end_time }}</p>
-            <p><strong>Specialty:</strong> {{ appointment.specialty }}</p>
         </div>
         <div class="card-footer d-flex justify-content-between">
             <a href="{% url 'doctor_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
