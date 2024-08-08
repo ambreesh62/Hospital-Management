@@ -224,7 +224,7 @@ from django.http import JsonResponse
 
 @login_required
 def book_appointment_view(request, doctor_id):
-    doctor = get_object_or_404(CustomUser, id=doctor_id)
+    doctor = get_object_or_404(Doctor, id=doctor_id)
     
     if request.method == "POST":
         try:
