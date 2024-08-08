@@ -480,10 +480,7 @@ def accept_appointment(request, appointment_id):
     appointment.save()
     return redirect('doctor_dashboard')
 
-@login_required
 def cancel_appointment(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id)
-    # Implement the logic to cancel the appointment
-    appointment.status = 'Canceled'  # Assuming there's a status field
-    appointment.save()
+    appointment.delete()  # This will delete the appointment
     return redirect('doctor_dashboard')
