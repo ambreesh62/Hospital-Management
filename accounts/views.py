@@ -251,6 +251,9 @@ def book_appointment_view(request, doctor_id):
             return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully!'})
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    
+    # Return a response for non-POST requests
+    return JsonResponse({'status': 'error', 'message': 'Method Not Allowed'}, status=405)
 
 
 
