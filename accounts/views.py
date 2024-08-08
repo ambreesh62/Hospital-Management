@@ -245,7 +245,7 @@ def book_appointment_view(request, doctor_id):
                 appointment.save()
 
                 # Optionally, handle Google Calendar event creation
-                # create_google_calendar_event(appointment)
+                create_google_calendar_event(appointment)
 
                 return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully!'})
             else:
