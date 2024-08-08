@@ -224,9 +224,14 @@ from django.http import JsonResponse
 
 @login_required
 def book_appointment_view(request, doctor_id):
-    # Fetch the Doctor instance using CustomUser
+    # Fetch the CustomUser instance
     custom_user = get_object_or_404(CustomUser, id=doctor_id)
-    doctor = get_object_or_404(Doctor, user=custom_user)
+    
+    # Try to fetch the Doctor instance related to the CustomUser
+    try:
+        doctor = Doctor.objects.get(user=custom_user)
+    except Doctor.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'No Doctor matches the given query.'}, status=404)
     
     if request.method == "POST":
         try:
