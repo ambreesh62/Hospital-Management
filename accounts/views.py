@@ -224,11 +224,7 @@ from django.http import JsonResponse
 
 @login_required
 def book_appointment_view(request, doctor_id):
-    # Fetch the CustomUser instance
-    user = get_object_or_404(CustomUser, id=doctor_id)
-
-    # Fetch the corresponding Doctor instance
-    doctor = get_object_or_404(Doctor, user=user)
+    doctor = get_object_or_404(CustomUser, id=doctor_id)
     
     if request.method == "POST":
         try:
@@ -236,14 +232,13 @@ def book_appointment_view(request, doctor_id):
             form = AppointmentForm(data)
             if form.is_valid():
                 appointment = form.save(commit=False)
-                appointment.doctor = doctor  # Assign the correct Doctor instance
-                appointment.patient = request.user  # Assuming `request.user` is a patient
-
-                # Calculate end_time by adding 45 minutes to the start_time
+                appointment.doctor = doctor
+                appointment.patient = request.user
                 appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
-                
-                # Save the appointment with the calculated end_time
                 appointment.save()
+
+                # Optionally, handle Google Calendar event creation
+                # create_google_calendar_event(appointment)
 
                 return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully!'})
             else:
