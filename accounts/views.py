@@ -26,7 +26,6 @@ from datetime import datetime, timedelta
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 import google.auth.exceptions
-from .utils import create_google_calendar_event
 
 
 
@@ -230,17 +229,22 @@ def doctor_dashboard_view(request):
 
 @login_required
 def book_appointment_view(request, doctor_id):
-     if request.method == 'POST':
+    doctor = get_object_or_404(CustomUser, id=doctor_id)
+
+    if request.method == 'POST':
         form = AppointmentForm(request.POST)
         if form.is_valid():
-            appointment = form.save()
+            appointment = form.save(commit=False)
+            appointment.doctor = doctor
+            appointment.patient = request.user
+            appointment.save()
             # Create a Google Calendar event
             event = create_google_calendar_event(appointment)
             # Optionally, add some response logic or messages here
             return redirect('appointment_confirmation', event_id=event['id'])
         else:
             form = AppointmentForm()
-        return render(request, 'book_appointment.html', {'form': form})
+        return render(request, 'book_appointment.html', {'form': form, 'doctor': doctor})
 
 
 def add_doctor(request):
