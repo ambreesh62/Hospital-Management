@@ -1,1 +1,2 @@
 .env
+!credentials/service-account-file.json
