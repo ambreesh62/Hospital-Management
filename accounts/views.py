@@ -231,20 +231,26 @@ def book_appointment_view(request, doctor_id):
 
         patient = request.user.patient
         try:
-            form = AppointmentForm(request.POST)
-            if form.is_valid():
-                appointment = form.save(commit=False)
-                appointment.doctor = doctor
-                appointment.patient = patient
-                appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
-                appointment.save()
-                return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully!'})
-            else:
-                return JsonResponse({'status': 'error', 'message': 'Invalid form data'}, status=400)
+            data = json.loads(request.body)
+            specialty = data.get('specialty')
+            date = data.get('date')
+            start_time = data.get('start_time')
+            end_time = data.get('end_time')
+
+            # Create appointment
+            appointment = Appointment(
+                doctor=doctor,
+                patient=patient,
+                specialty=specialty,
+                date=date,
+                start_time=start_time,
+                end_time=end_time
+            )
+            appointment.save()
+
+            return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully!'})
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-    else:
-        return JsonResponse({'status': 'error', 'message': 'Method Not Allowed'}, status=405)
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
 
 
