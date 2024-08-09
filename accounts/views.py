@@ -171,7 +171,7 @@ def book_appointment_view(request, doctor_id):
                 end_time = datetime.combine(appointment.date, appointment.end_time)
 
                 event_details = {
-                    'summary': f"Appointment with Dr. {doctor.get_full_name()}",
+                    'summary': f"Appointment with Dr. {doctor.user.get_full_name()}",
                     'description': f"Appointment with Dr. {doctor.get_full_name()} for {appointment.reason}",
                     'start': {
                         'dateTime': start_time.isoformat(),
