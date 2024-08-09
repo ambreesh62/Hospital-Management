@@ -161,10 +161,34 @@ def book_appointment_view(request, doctor_id):
                 appointment = form.save(commit=False)
                 appointment.doctor = doctor  # This should be a Doctor instance
                 appointment.patient = request.user
+
+                # Calculate the end time by adding 45 minutes to the start time
                 appointment.end_time = (datetime.combine(appointment.date, appointment.start_time) + timedelta(minutes=45)).time()
                 appointment.save()
 
-                return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully!'})
+                # Prepare the event details for Google Calendar
+                start_time = datetime.combine(appointment.date, appointment.start_time)
+                end_time = datetime.combine(appointment.date, appointment.end_time)
+
+                event_details = {
+                    'summary': f"Appointment with Dr. {doctor.get_full_name()}",
+                    'description': f"Appointment with Dr. {doctor.get_full_name()} for {appointment.reason}",
+                    'start': {
+                        'dateTime': start_time.isoformat(),
+                        'timeZone': 'America/Los_Angeles',  # Adjust as necessary
+                    },
+                    'end': {
+                        'dateTime': end_time.isoformat(),
+                        'timeZone': 'America/Los_Angeles',  # Adjust as necessary
+                    },
+                }
+
+                try:
+                    create_google_calendar_event(event_details)
+                except Exception as e:
+                    return JsonResponse({'status': 'error', 'message': f'Appointment booked, but failed to add to Google Calendar: {str(e)}'})
+
+                return JsonResponse({'status': 'success', 'message': 'Appointment booked successfully and added to Google Calendar!'})
             else:
                 return JsonResponse({'status': 'error', 'message': 'Invalid form data'})
         except json.JSONDecodeError:

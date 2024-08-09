@@ -1,39 +1,33 @@
-import datetime
-from google.oauth2 import service_account
+import os
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
+import googleapiclient.discovery
 from googleapiclient.discovery import build
-from django.conf import settings
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
 
-def create_google_calendar_event(appointment):
-    # Load service account credentials
-    credentials = service_account.Credentials.from_service_account_file(
-        settings.SERVICE_ACCOUNT_FILE,
-        scopes=['https://www.googleapis.com/auth/calendar']
-    )
+SCOPES = ['https://www.googleapis.com/auth/calendar']
 
-    # Build the Calendar API service
-    service = build('calendar', 'v3', credentials=credentials)
+def authenticate_google_calendar():
+    creds = None
+    token_path = 'token.json'
+    credentials_path = 'credentials.json'
+    
+    if os.path.exists(token_path):
+        creds = google.oauth2.credentials.Credentials.from_authorized_user_file(token_path, SCOPES)
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(credentials_path, SCOPES)
+            creds = flow.run_local_server(port=0)
+            with open(token_path, 'w') as token:
+                token.write(creds.to_json())
+    return creds
 
-    # Combine date and time into ISO 8601 format
-    start_datetime = datetime.datetime.combine(appointment.date, appointment.start_time).isoformat()
-    end_datetime = datetime.datetime.combine(appointment.date, appointment.end_time).isoformat()
+def create_google_calendar_event(event_details):
+    creds = authenticate_google_calendar()
+    service = build('calendar', 'v3', credentials=creds)
 
-    # Create an event body
-    event = {
-        'summary': f'Appointment with Dr. {appointment.doctor.first_name} {appointment.doctor.last_name}',
-        'start': {
-            'dateTime': start_datetime,
-            'timeZone': 'UTC',
-        },
-        'end': {
-            'dateTime': end_datetime,
-            'timeZone': 'UTC',
-        },
-        'attendees': [
-            {'email': appointment.doctor.email},
-            {'email': appointment.patient.email},
-        ],
-    }
-
-    # Insert the event into the calendar
-    event = service.events().insert(calendarId='primary', body=event).execute()
+    event = service.events().insert(calendarId='primary', body=event_details).execute()
     return event
