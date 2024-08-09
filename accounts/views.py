@@ -172,7 +172,7 @@ def book_appointment_view(request, doctor_id):
 
                 event_details = {
                     'summary': f"Appointment with Dr. {doctor.user.get_full_name()}",
-                    'description': f"Appointment with Dr. {doctor.user.get_full_name()} for {appointment.reason}",
+                    'description': f"Appointment with Dr. {doctor.user.get_full_name()},
                     'start': {
                         'dateTime': start_time.isoformat(),
                         'timeZone': 'America/Los_Angeles',  # Adjust as necessary
