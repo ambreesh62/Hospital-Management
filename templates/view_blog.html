@@ -8,14 +8,15 @@
     {% for category in categories %}
         <h3>{{ category.name }}</h3>
         <div class="list-group mb-4">
-            {% for post in category.blogpost_set.all %}
-                {% if not post.is_draft %}
-                    <a href="{% url 'post_detail' post.id %}" class="list-group-item list-group-item-action">
-                        <h5 class="mb-1">{{ post.title }}</h5>
-                        <p class="mb-1">{{ post.content|truncatewords:30 }}</p>
-                        <small class="text-muted">By {{ post.author.get_full_name }} on {{ post.created_at }}</small>
-                    </a>
-                {% endif %}
+            {% for post in filtered_posts[category] %}
+                <a href="{% url 'post_detail' post.id %}" class="list-group-item list-group-item-action">
+                    <h5 class="mb-1">{{ post.title }}</h5>
+                    <p class="mb-1">{{ post.content|truncatewords:30 }}</p>
+                    <small class="text-muted">By {{ post.author.get_full_name }} on {{ post.created_at }}</small>
+                    {% if post.is_draft and request.user == post.author %}
+                        <span class="badge bg-warning text-dark">Draft</span>
+                    {% endif %}
+                </a>
             {% endfor %}
         </div>
     {% endfor %}
