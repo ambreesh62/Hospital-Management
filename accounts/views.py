@@ -281,7 +281,7 @@ from .models import BlogPost, Category
 @login_required
 def create_blog_post(request):
     if request.user.user_type != 'doctor':
-        messages.error(request, 'You do not have permission to edit this post.')
+        messages.error(request, 'You do not have permission to create Post Blog.')
         return redirect('home')  # Redirect non-doctors
     if request.method == 'POST':
         form = BlogPostForm(request.POST, request.FILES)
