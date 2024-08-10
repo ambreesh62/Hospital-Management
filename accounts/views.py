@@ -281,6 +281,7 @@ from .models import BlogPost, Category
 @login_required
 def create_blog_post(request):
     if request.user.user_type != 'doctor':
+        messages.error(request, 'You do not have permission to edit this post.')
         return redirect('home')  # Redirect non-doctors
     if request.method == 'POST':
         form = BlogPostForm(request.POST, request.FILES)
@@ -327,6 +328,10 @@ def category_blogs_view(request, category_id):
 @login_required
 def edit_blog_post(request, post_id):
     post = get_object_or_404(BlogPost, id=post_id)
+    if request.user.user_type != 'doctor':
+        messages.error(request, 'You do not have permission to edit this post.')
+        return redirect('home')  # Redirect to a different page if not a doctor
+    
     if request.method == 'POST':
         form = BlogPostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
