@@ -99,7 +99,7 @@ def patient_dashboard_view(request):
 
     # Check if the user is a patient
     if user.user_type != 'patient':
-        # Redirect to the appropriate dashboard (e.g., doctor_dashboard)
+        messages.success(request, 'No permission allowed to switch patient dashboard!')
         return redirect('doctor_dashboard')  # or any other appropriate page
 
     # Retrieve all doctors to display on the dashboard
@@ -125,7 +125,7 @@ def doctor_dashboard_view(request):
     try:
         doctor = Doctor.objects.get(user=request.user)
     except Doctor.DoesNotExist:
-        # Redirect to an error page if the doctor profile does not exist
+        messages.success(request, 'No permission allowed to switch doctor dashboard!')
         return redirect('patient_dashboard')
 
     # Get the logged-in user
@@ -304,11 +304,14 @@ def post_detail_view(request, id):
 
 @login_required
 def doctor_blogs_view(request):
-    if request.user.is_authenticated and request.user.user_type == 'doctor':
-        blog_posts = BlogPost.objects.filter(author=request.user, is_draft=False)
-        return render(request, 'doctor_blogs.html', {'blog_posts': blog_posts})
-    else:
-        return redirect('login')
+    if request.user.user_type != 'doctor':
+        return redirect('home')  # Or any other appropriate action
+
+    blog_posts = BlogPost.objects.filter(author=request.user)
+    context = {
+        'blog_posts': blog_posts,
+    }
+    return render(request, 'doctor_blogs.html', context)
 
 
 def view_blog_view(request):
