@@ -205,6 +205,10 @@ def profile_view(request):
         return render(request, template_name, {'profile': profile})
     else:
         return redirect('login')
+@login_required
+def patient_profile_view(request):
+    patient = get_object_or_404(Patient, user=request.user)
+    return render(request, 'patient_profile.html', {'patient': patient})    
 
 @login_required
 def edit_patient_profile(request):
