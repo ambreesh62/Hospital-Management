@@ -127,6 +127,14 @@ class BlogPostForm(forms.ModelForm):
 
 
 class PatientProfileForm(forms.ModelForm):
+    GENDER_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Other'),
+    ]
+
+    gender = forms.ChoiceField(choices=GENDER_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
+
     class Meta:
         model = Patient
         fields = ['name', 'gender', 'medical_history', 'address']
