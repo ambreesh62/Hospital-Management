@@ -204,7 +204,7 @@ def profile_view(request):
         return HttpResponse("Invalid user type", status=400)
 
 @login_required
-def edit_patient_profile(request):
+def edit_patient_profile(request, id):
     patient = get_object_or_404(Patient, id=id)
     
     if request.method == 'POST':
