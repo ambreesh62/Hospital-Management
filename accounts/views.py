@@ -194,7 +194,7 @@ def error_page(request):
 
 
 @login_required
-def profile_view(request):
+def doctor_profile_view(request):
     doctor = get_object_or_404(Doctor, user=request.user)
     return render(request, 'doctor_profile.html', {'doctor' : doctor}) 
 
