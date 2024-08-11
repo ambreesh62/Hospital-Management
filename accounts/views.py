@@ -205,17 +205,18 @@ def profile_view(request):
 
 @login_required
 def edit_patient_profile(request):
-    patient = get_object_or_404(Patient, user=request.user)
+    patient = get_object_or_404(Patient, id=id)
+    
     if request.method == 'POST':
         form = PatientProfileForm(request.POST, instance=patient)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Profile updated successfully!')
-            return redirect('profile')  # Redirect to the patient's profile page
+            messages.success(request, 'Patient Profile Successfully Updated')
+            return redirect('patient_profile', id=patient.id)
     else:
         form = PatientProfileForm(instance=patient)
-    
-    return render(request, 'edit_patient_profile.html', {'form': form})    
+
+    return render(request, 'edit_patient_profile.html', {'form': form, 'patient': patient})   
 
 
 
@@ -294,7 +295,7 @@ from .models import BlogPost, Category
 @login_required
 def create_blog_post(request):
     if request.user.user_type != 'doctor':
-        messages.error(request, 'You do not have permission to create Post Blog.')
+        messages.error(request, 'You do not have permission to create Post Blog only allowed doctors create post .')
         return redirect('home')  # Redirect non-doctors
     if request.method == 'POST':
         form = BlogPostForm(request.POST, request.FILES)
