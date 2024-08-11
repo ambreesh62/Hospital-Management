@@ -192,20 +192,16 @@ def error_page(request):
     return render(request, "error.html")
 
 
-
 @login_required
-def doctor_profile_view(request):
-    doctor = get_object_or_404(Doctor, user=request.user)
-    return render(request, 'doctor_profile.html', {'doctor' : doctor}) 
-
-
-
-@login_required
-def patient_profile_view(request):
-    patient = get_object_or_404(Patient, user=request.user)
-    return render(request, 'patient_profile.html', {'patient': patient})    
-
-
+def profile_view(request):
+    if request.user.user_type == 'doctor':
+        doctor = get_object_or_404(Doctor, user=request.user)
+        return render(request, 'doctor_profile.html', {'doctor': doctor})
+    elif request.user.user_type == 'patient':
+        patient = get_object_or_404(Patient, user=request.user)
+        return render(request, 'patient_profile.html', {'patient': patient})
+    else:
+        return HttpResponse("Invalid user type", status=400)
 
 @login_required
 def edit_patient_profile(request):
@@ -219,8 +215,7 @@ def edit_patient_profile(request):
     else:
         form = PatientProfileForm(instance=patient)
     
-    return render(request, 'edit_patient_profile.html', {'form': form})
-
+    return render(request, 'edit_patient_profile.html', {'form': form})    
 
 
 
