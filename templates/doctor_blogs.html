@@ -19,7 +19,9 @@
                     <p><strong>Summary:</strong> {{ post.summary }}</p>
                     <p><strong>Draft:</strong> {% if post.is_draft %}Yes{% else %}No{% endif %}</p>
                     <a href="{% url 'post_detail' post.id %}" class="btn btn-primary btn-custom mt-3">Read More</a>
+                    <div>
                     <a href="{% url 'edit_blog_post' post.id %}" class="btn btn-warning btn-custom mt-3">Update Post</a>
+                    </div>
                 </div>
             {% endfor %}
         </div>

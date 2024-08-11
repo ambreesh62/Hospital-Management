@@ -58,7 +58,7 @@ urlpatterns = [
     path('profile/patient/<int:patient_id>/', views.profile_view, name='profile_patient_by_id'),
 
     path("profile/<int:patient_id>/", profile_view, name="profile"),
-    path('profile/<int:patient_id>/', views.profile_view, name='patient_profile'),  # Handles a specific doctor's profile
+    path('profile/<int:patient_id>/', views.profile_view, name='profile_view'),
 
 
     
