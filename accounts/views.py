@@ -195,7 +195,7 @@ def profile_view(request):
     if request.user.is_authenticated:
         if hasattr(request.user, 'doctor'):
             profile = get_object_or_404(Doctor, user=request.user)
-            template_name = 'doctor_profile.html'
+            template_name = 'profile.html'
         elif hasattr(request.user, 'patient'):
             profile = get_object_or_404(Patient, user=request.user)
             template_name = 'patient_profile.html'
