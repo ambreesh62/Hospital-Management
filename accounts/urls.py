@@ -16,6 +16,7 @@ from .views import (
     error_page,
     about,
     edit_blog_post,
+    edit_patient_profile,
 )
 
 urlpatterns = [
@@ -53,6 +54,8 @@ urlpatterns = [
     path('appointment/<int:appointment_id>/accept/', views.accept_appointment, name='accept_appointment'),
     path('appointment/<int:appointment_id>/cancel/', views.cancel_appointment, name='cancel_appointment'),
     path('profile/<int:patient_id>/', views.profile_view, name='patient_profile'),
+    path('patient/edit/<int:id>/', edit_patient_profile, name='edit_patient_profile'),
+
 
     
 

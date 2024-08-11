@@ -15,6 +15,7 @@ from .forms import (
     PatientForm,
     AppointmentForm,
     EditDoctorProfileForm,
+    PatientProfileForm
 )
 from .models import Doctor, Appointment,CustomUser
 import json
@@ -195,7 +196,7 @@ def profile_view(request):
     if request.user.is_authenticated:
         if hasattr(request.user, 'doctor'):
             profile = get_object_or_404(Doctor, user=request.user)
-            template_name = 'profile.html'
+            template_name = 'doctor_profile.html'
         elif hasattr(request.user, 'patient'):
             profile = get_object_or_404(Patient, user=request.user)
             template_name = 'patient_profile.html'
@@ -204,6 +205,22 @@ def profile_view(request):
         return render(request, template_name, {'profile': profile})
     else:
         return redirect('login')
+
+@login_required
+def edit_patient_profile(request):
+    patient = get_object_or_404(Patient, user=request.user)
+    if request.method == 'POST':
+        form = PatientProfileForm(request.POST, instance=patient)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('profile')  # Redirect to the patient's profile page
+    else:
+        form = PatientProfileForm(instance=patient)
+    
+    return render(request, 'edit_patient_profile.html', {'form': form})
+
+
 
 
 def logout_view(request):
