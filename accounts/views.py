@@ -269,7 +269,7 @@ def update_doctor_profile_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Profile updated successfully.")
-            return redirect("doctor_profile")  # Redirect to the profile view
+            return redirect("doctor_profile", doctor_id=doctor.id)  # Redirect to the profile view
     else:
         form = EditDoctorProfileForm(instance=doctor)
 
