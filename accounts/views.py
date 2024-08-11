@@ -224,7 +224,7 @@ def edit_patient_profile(request, id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Patient Profile Successfully Updated')
-            return redirect('profile_view')  # Assuming a patient is logged in
+            return redirect('profile_view', patient_id=patient.id)  # Assuming a patient is logged in
 
     else:
         form = PatientProfileForm(instance=patient)
