@@ -15,6 +15,9 @@
                         <p class="mb-1">{{ post.content|truncatewords:30 }}</p>
                         <small class="text-muted">By {{ post.author.get_full_name }} on {{ post.created_at }}</small>
                     </a>
+                    {% if post.author == request.user %}
+                    <a href="{% url 'edit_blog_post' post.id %}" class="btn btn-warning mt-3">Edit Post</a>
+                {% endif %}
                 {% endif %}
             {% endfor %}
         </div>
