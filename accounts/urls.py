@@ -27,12 +27,14 @@ urlpatterns = [
     path("patient_dashboard/", patient_dashboard_view, name="patient_dashboard"),
     path("error/", error_page, name="error_page"),
     path("profile/", profile_view, name="profile"),
+    path("profile/<int:doctor_id>/", profile_view, name="profile"),
     path("logout/", logout_view, name="logout"),
     path("view_doctor/<int:doctor_id>/", view_doctor_view, name="view_doctor"),
     path("edit_doctor/<int:doctor_id>/", edit_doctor_view, name="edit_doctor"),
     path("delete_doctor/<int:doctor_id>/", delete_doctor_view, name="delete_doctor"),
     path("update_profile/", update_doctor_profile_view, name="update_doctor_profile"),
     path("about/", about, name="about"),
+    path('profile/<int:doctor_id>/', views.profile_view, name='doctor_profile'),  # Handles a specific doctor's profile
 
     # new
     path('create_blog_post/', views.create_blog_post, name='create_blog_post'),

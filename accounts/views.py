@@ -214,6 +214,8 @@ def profile_view(request, doctor_id=None, patient_id=None):
             return render(request, 'patient_profile.html', {'patient': patient})
     else:
         return HttpResponse("Invalid user type", status=400)
+    
+    
 
 @login_required
 def edit_patient_profile(request, id):
@@ -223,7 +225,7 @@ def edit_patient_profile(request, id):
         form = PatientProfileForm(request.POST, instance=patient)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Patient Profile Successfully Updated')
+            messages.success(request, 'Profile updated successfully')
             return redirect('profile_view', patient_id=patient.id)  # Assuming a patient is logged in
 
     else:
