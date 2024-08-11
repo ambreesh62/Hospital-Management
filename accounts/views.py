@@ -193,13 +193,25 @@ def error_page(request):
 
 
 @login_required
-def profile_view(request):
+def profile_view(request, doctor_id=None, patient_id=None):
     if request.user.user_type == 'doctor':
-        doctor = get_object_or_404(Doctor, user=request.user)
-        return render(request, 'doctor_profile.html', {'doctor': doctor})
+        # If a doctor_id is provided, fetch the specific doctor
+        if doctor_id:
+            doctor = get_object_or_404(Doctor, id=doctor_id)
+            return render(request, 'doctor_profile.html', {'doctor': doctor})
+        # Otherwise, fetch the currently logged-in doctor
+        else:
+            doctor = get_object_or_404(Doctor, user=request.user)
+            return render(request, 'doctor_profile.html', {'doctor': doctor})
     elif request.user.user_type == 'patient':
-        patient = get_object_or_404(Patient, user=request.user)
-        return render(request, 'patient_profile.html', {'patient': patient})
+        # If a patient_id is provided, fetch the specific patient
+        if patient_id:
+            patient = get_object_or_404(Patient, id=patient_id)
+            return render(request, 'patient_profile.html', {'patient': patient})
+        # Otherwise, fetch the currently logged-in patient
+        else:
+            patient = get_object_or_404(Patient, user=request.user)
+            return render(request, 'patient_profile.html', {'patient': patient})
     else:
         return HttpResponse("Invalid user type", status=400)
 
